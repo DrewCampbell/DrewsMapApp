@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:android1="http://schemas.android.com/apk/res/android">
+
+    <string name="app_name">AD220Project3</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string android:id="@+id/string1" name="action_move" android:layout_width="wrap_content" android:layout_height="wrap_content">Move to</string>
+    <string android:id="@+id/string1" name="action_latlong" android:layout_width="wrap_content" android:layout_height="wrap_content">Lat, Long</string>
+    <string android:id="@+id/string1" name="action_address" android:layout_width="wrap_content" android:layout_height="wrap_content">Address</string>
+    <string android:id="@+id/string1" name="action_location" android:layout_width="wrap_content" android:layout_height="wrap_content">Location</string>
+    <string android:id="@+id/string1" name="action_thislocation" android:layout_width="wrap_content" android:layout_height="wrap_content">This Location</string>
+    <string android:id="@+id/string1" name="latitude" android:layout_width="wrap_content" android:layout_height="wrap_content">Latitude</string>
+    <string android:id="@+id/string1" name="longitude" android:layout_width="wrap_content" android:layout_height="wrap_content">Longitude</string>
+    <string android:id="@+id/string1" name="btnGoTo" android:layout_width="wrap_content" android:layout_height="wrap_content">Go to</string>
+    <string android:id="@+id/string1" name="btnCancel" android:layout_width="wrap_content" android:layout_height="wrap_content">Cancel</string>
+    <string android:id="@+id/string1" name="address1" android:layout_width="wrap_content" android:layout_height="wrap_content">Address1</string>
+    <string android:id="@+id/string1" name="address2" android:layout_width="wrap_content" android:layout_height="wrap_content">Address2</string>
+    <string name="title_activity_custom2">Custom2</string>
+    <string name="title_activity_splash">Drew\'s Map App</string>
+    <string android:id="@+id/string1" name="action_about" android:layout_width="wrap_content" android:layout_height="wrap_content">About</string>
+    <string name="title_activity_settings">SettingsActivity</string>
+    <string name="title_activity_about">AboutActivity</string>
+    <string android1:id="@+id/string1" name="btnOK" android1:layout_width="wrap_content" android1:layout_height="wrap_content">OK</string>
+    <string android1:id="@+id/string1" name="strAbout1" android1:layout_width="wrap_content" android1:layout_height="wrap_content">Drew\'s Map App - Created by Andrew Campbell.  08/01/14</string>
+    <string name="title_activity_help">HelpActivity</string>
+    <string android1:id="@+id/string1" name="strHelp1" android1:layout_width="wrap_content" android1:layout_height="wrap_content">The Drew\'s Map App, has three ways to navigate to a location</string>
+    <string android1:id="@+id/string1" name="action_help" android1:layout_width="wrap_content" android1:layout_height="wrap_content">Help</string>
+    <string android1:id="@+id/string1" name="strHelp2" android1:layout_width="wrap_content" android1:layout_height="wrap_content">You can search by Latitude and Longitude.  On the top manu bar, click \'Move to\', \'Lat, Long\'.  Enter the latitude, then the longitude, and click \'Go to\'.</string>
+    <string android1:id="@+id/string1" name="strHelp3" android1:layout_width="wrap_content" android1:layout_height="wrap_content">You can also move to a location by entering it\'s address, or location name.  On the upper menu bar, click on \'Move To\', \'Address\'.  Enter either the address or the place name (Such as Yellowstone).  Click the \'Go to\' button to go to the location.</string>
+    <string android1:id="@+id/string1" name="strHelp4" android1:layout_width="wrap_content" android1:layout_height="wrap_content">You can also go to the location you are currently located.  Click \'Move to\', then click \'This Location\'.</string>
+    <string android1:id="@+id/string1" name="strSetZoom" android1:layout_width="wrap_content" android1:layout_height="wrap_content">Set Zoom</string>
+    <string android1:id="@+id/string1" name="strZoomDefault" android1:layout_width="wrap_content" android1:layout_height="wrap_content">Default Zoom</string>
+    <string android1:id="@+id/string1" name="strSettingsHelp" android1:layout_width="wrap_content" android1:layout_height="wrap_content">Select a zoom value from the dropdown list 1=world view, 21-street view.  Default=15.</string>
+    <string android1:id="@+id/string1" name="radTrafficOn" android1:layout_width="wrap_content" android1:layout_height="wrap_content">Traffic On</string>
+    <string android1:id="@+id/string1" name="radTrafficOff" android1:layout_width="wrap_content" android1:layout_height="wrap_content">Traffic Off</string>
+    <string android1:id="@+id/string1" name="strChangeSettings" android1:layout_width="wrap_content" android1:layout_height="wrap_content">Change Settings</string>
+    <string android1:id="@+id/string1" name="strDefaultSettings" android1:layout_width="wrap_content" android1:layout_height="wrap_content">Default Settings</string>
+    <string android1:id="@+id/string1" name="action_track" android1:layout_width="wrap_content" android1:layout_height="wrap_content">Track</string>
+    <string android1:id="@+id/string1" name="action_track_start" android1:layout_width="wrap_content" android1:layout_height="wrap_content">Start Track</string>
+    <string android1:id="@+id/string1" name="action_track_stop" android1:layout_width="wrap_content" android1:layout_height="wrap_content">Stop Track</string>
+    <string android1:id="@+id/string1" name="action_track_open" android1:layout_width="wrap_content" android1:layout_height="wrap_content">Open Track</string>
+    <string android1:id="@+id/string1" name="action_track_save" android1:layout_width="wrap_content" android1:layout_height="wrap_content">Save Track</string> 
+    <string name="title_activity_track">TrackActivity</string>
+    <string android1:layout_height="wrap_content" android1:id="@+id/string1" android1:layout_width="wrap_content" name="strHelp5">The default zoom start value is 18, but this can be reset using the settings tab.  The range for these values are 1=world view to 21= streeet view.  Also in the settings tab, you can set the map to show traffic on highways and major streets.  By default, this value is false.</string>
+
+</resources>
