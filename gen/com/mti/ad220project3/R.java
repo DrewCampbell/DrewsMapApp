@@ -1466,7 +1466,7 @@ containing a value of this type.
     }
     public static final class id {
         public static final int RelativeLayout1=0x7f080060;
-        public static final int action_about=0x7f080073;
+        public static final int action_about=0x7f080078;
         public static final int action_address=0x7f08006c;
         public static final int action_bar=0x7f08002e;
         public static final int action_bar_activity_content=0x7f080027;
@@ -1476,19 +1476,24 @@ containing a value of this type.
         public static final int action_bar_subtitle=0x7f080035;
         public static final int action_bar_title=0x7f080034;
         public static final int action_context_bar=0x7f08002f;
-        public static final int action_help=0x7f080074;
+        public static final int action_help=0x7f080079;
         public static final int action_latlong=0x7f08006b;
         public static final int action_menu_divider=0x7f080028;
         public static final int action_menu_presenter=0x7f080029;
         public static final int action_mode_close_button=0x7f080036;
         public static final int action_move=0x7f08006a;
+        public static final int action_position_track=0x7f08006e;
+        public static final int action_position_track_open=0x7f080071;
+        public static final int action_position_track_save=0x7f080072;
+        public static final int action_position_track_start=0x7f08006f;
+        public static final int action_position_track_stop=0x7f080070;
         public static final int action_settings=0x7f080069;
         public static final int action_thislocation=0x7f08006d;
-        public static final int action_track=0x7f08006e;
-        public static final int action_track_open=0x7f080071;
-        public static final int action_track_save=0x7f080072;
-        public static final int action_track_start=0x7f08006f;
-        public static final int action_track_stop=0x7f080070;
+        public static final int action_track=0x7f080073;
+        public static final int action_track_open=0x7f080076;
+        public static final int action_track_save=0x7f080077;
+        public static final int action_track_start=0x7f080074;
+        public static final int action_track_stop=0x7f080075;
         public static final int activity_chooser_view_content=0x7f080037;
         public static final int always=0x7f08001e;
         public static final int beginning=0x7f080023;
@@ -1701,6 +1706,11 @@ containing a value of this type.
         public static final int action_latlong=0x7f07002b;
         public static final int action_location=0x7f07002d;
         public static final int action_move=0x7f07002a;
+        public static final int action_position_track=0x7f07004e;
+        public static final int action_position_track_open=0x7f070051;
+        public static final int action_position_track_save=0x7f070052;
+        public static final int action_position_track_start=0x7f07004f;
+        public static final int action_position_track_stop=0x7f070050;
         public static final int action_settings=0x7f070029;
         public static final int action_thislocation=0x7f07002e;
         public static final int action_track=0x7f070049;
@@ -1815,7 +1825,7 @@ containing a value of this type.
         public static final int strHelp2=0x7f07003f;
         public static final int strHelp3=0x7f070040;
         public static final int strHelp4=0x7f070041;
-        public static final int strHelp5=0x7f07004f;
+        public static final int strHelp5=0x7f070054;
         public static final int strSetZoom=0x7f070042;
         public static final int strSettingsHelp=0x7f070044;
         public static final int strZoomDefault=0x7f070043;
@@ -1824,7 +1834,7 @@ containing a value of this type.
         public static final int title_activity_help=0x7f07003c;
         public static final int title_activity_settings=0x7f070038;
         public static final int title_activity_splash=0x7f070036;
-        public static final int title_activity_track=0x7f07004e;
+        public static final int title_activity_track=0x7f070053;
         /**  Text on a placeholder buy button when Google Play services is not
          available or up-to-date 
          */

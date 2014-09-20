@@ -10,6 +10,7 @@ package com.mti.ad220project3;
 import java.io.File;
 import java.io.FileWriter;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -25,10 +26,13 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.media.AudioFormat;
+import android.media.AudioRecord;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.PowerManager;
 import android.preference.PreferenceManager;
+import android.speech.RecognizerIntent;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -84,10 +88,20 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 	  LatLng oldLatLng;
 	  
 	  Boolean keepTracking;
+	  Boolean positionTracking;
 
 	  
 	  protected PowerManager.WakeLock mWakeLock;
   	  
+	  // Changed this for testing purposes
+	  //protected static final int REQUEST_OK = 1;
+	  protected static final int REQUEST_OK = 1234;
+
+	  //  The following is used to detect audio input
+	  private static final int RECORDER_SAMPLERATE = 8000;
+	  private static final int RECORDER_CHANNELS = AudioFormat.CHANNEL_IN_MONO;
+	  private static final int RECORDER_AUDIO_ENCODING = AudioFormat.ENCODING_PCM_16BIT;
+	  
 	  
 	  @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -450,6 +464,57 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
             
 			break;
 
+			
+		//  New code to for position tracking
+		case R.id.action_position_track_start:
+			
+			positionTracking = true;
+
+
+
+			
+			
+		    // Get the minimum buffer size required for the successful creation of an AudioRecord object. 
+		    int bufferSizeInBytes = AudioRecord.getMinBufferSize( RECORDER_SAMPLERATE,
+		                                                          RECORDER_CHANNELS,
+		                                                          RECORDER_AUDIO_ENCODING
+		                                                         ); 
+			
+			
+			
+			//while(positionTracking == true) {
+				Intent i = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+				i.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, "en-US");
+				i.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS,10);				
+				try {
+					startActivityForResult(i, REQUEST_OK);
+				} catch(Exception e) {
+					Toast.makeText(this, "Error initializing speech to text engine", Toast.LENGTH_LONG).show();
+				}
+			
+				ArrayList<String> info;
+				info = i.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+			
+			//}
+			
+			//if(info.get(0).contains("test")) {
+			//	Toast.makeText(this, "word detected", Toast.LENGTH_LONG).show();				
+			//}	else {
+			//	
+			//	Toast.makeText(this, "word not detected", Toast.LENGTH_LONG).show();				
+			//}
+			
+
+			
+		
+			
+			
+			
+			
+			
+			
+			break;
+			
 		case R.id.action_track_start:	
 
     	    Toast.makeText(getBaseContext(), "Start Tracking!", Toast.LENGTH_SHORT).show();    	    
@@ -627,6 +692,50 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 		//moveToLatLong(map, pLat, pLong);
 	}
 
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+	        super.onActivityResult(requestCode, resultCode, data);
+	        if (requestCode==REQUEST_OK  && resultCode==RESULT_OK) {
+	        		ArrayList<String> thingsYouSaid = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+
+	        		
+	    			Toast.makeText(this, thingsYouSaid.get(0), Toast.LENGTH_LONG).show();	
+	    			Toast.makeText(this, "Length = " + thingsYouSaid.size(), Toast.LENGTH_LONG).show();
+	    			
+	    			LatLng newLatLng = new LatLng(pLat, pLong);
+
+	    			if(thingsYouSaid.get(0).equals("done") ) {
+	    				positionTracking = false;
+	    			}	    	    	
+	    	    	
+	    			if(thingsYouSaid.get(0).equals("grape")||thingsYouSaid.get(0).equals("grapes")||thingsYouSaid.get(0).equals("great")||thingsYouSaid.get(0).equals("grace")||thingsYouSaid.get(0).equals("drapes") ) {
+	    				Marker mti = map.addMarker(new MarkerOptions().position(newLatLng)
+	    						.title("MTI")    	
+	    						.position(newLatLng)
+	    						.title("MTI")
+	    						.snippet("test")
+	    						.icon(BitmapDescriptorFactory
+	    								.fromResource(R.drawable.grapes)));
+	    			}
+	    			if(thingsYouSaid.get(0).equals("blackberry")||thingsYouSaid.get(0).equals("blackberries") ) {
+	    				Marker mti = map.addMarker(new MarkerOptions().position(newLatLng)
+	    						.title("MTI")    	
+	    						.position(newLatLng)
+	    						.title("MTI")
+	    						.snippet("test")
+	    						.icon(BitmapDescriptorFactory
+	    								.fromResource(R.drawable.blackberry)));
+	    			}
+	    				    			
+	        }
+	    }
+	
+	
+	
+	
+	
+	
 	@Override
 	public void onProviderDisabled(String arg0) {
 		// TODO Auto-generated method stub

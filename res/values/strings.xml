@@ -35,11 +35,16 @@
     <string android1:id="@+id/string1" name="radTrafficOff" android1:layout_width="wrap_content" android1:layout_height="wrap_content">Traffic Off</string>
     <string android1:id="@+id/string1" name="strChangeSettings" android1:layout_width="wrap_content" android1:layout_height="wrap_content">Change Settings</string>
     <string android1:id="@+id/string1" name="strDefaultSettings" android1:layout_width="wrap_content" android1:layout_height="wrap_content">Default Settings</string>
-    <string android1:id="@+id/string1" name="action_track" android1:layout_width="wrap_content" android1:layout_height="wrap_content">Track</string>
-    <string android1:id="@+id/string1" name="action_track_start" android1:layout_width="wrap_content" android1:layout_height="wrap_content">Start Track</string>
-    <string android1:id="@+id/string1" name="action_track_stop" android1:layout_width="wrap_content" android1:layout_height="wrap_content">Stop Track</string>
-    <string android1:id="@+id/string1" name="action_track_open" android1:layout_width="wrap_content" android1:layout_height="wrap_content">Open Track</string>
-    <string android1:id="@+id/string1" name="action_track_save" android1:layout_width="wrap_content" android1:layout_height="wrap_content">Save Track</string> 
+    <string android1:id="@+id/string1" name="action_track" android1:layout_width="wrap_content" android1:layout_height="wrap_content">Time Track</string>
+    <string android1:id="@+id/string1" name="action_track_start" android1:layout_width="wrap_content" android1:layout_height="wrap_content">Start Time Track</string>
+    <string android1:id="@+id/string1" name="action_track_stop" android1:layout_width="wrap_content" android1:layout_height="wrap_content">Stop Time Track</string>
+    <string android1:id="@+id/string1" name="action_track_open" android1:layout_width="wrap_content" android1:layout_height="wrap_content">Open Time Track</string>
+    <string android1:id="@+id/string1" name="action_track_save" android1:layout_width="wrap_content" android1:layout_height="wrap_content">Save Time Track</string> 
+    <string android1:id="@+id/string1" name="action_position_track" android1:layout_width="wrap_content" android1:layout_height="wrap_content">Pos. Track</string>
+    <string android1:id="@+id/string1" name="action_position_track_start" android1:layout_width="wrap_content" android1:layout_height="wrap_content">Start Pos. Track</string>
+    <string android1:id="@+id/string1" name="action_position_track_stop" android1:layout_width="wrap_content" android1:layout_height="wrap_content">Stop Pos. Track</string>
+    <string android1:id="@+id/string1" name="action_position_track_open" android1:layout_width="wrap_content" android1:layout_height="wrap_content">Open Pos. Track</string>
+    <string android1:id="@+id/string1" name="action_position_track_save" android1:layout_width="wrap_content" android1:layout_height="wrap_content">Save Pos. Track</string> 
     <string name="title_activity_track">TrackActivity</string>
     <string android1:layout_height="wrap_content" android1:id="@+id/string1" android1:layout_width="wrap_content" name="strHelp5">The default zoom start value is 18, but this can be reset using the settings tab.  The range for these values are 1=world view to 21= streeet view.  Also in the settings tab, you can set the map to show traffic on highways and major streets.  By default, this value is false.</string>
 
