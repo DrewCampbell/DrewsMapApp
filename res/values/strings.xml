@@ -35,14 +35,15 @@
     <string android1:id="@+id/string1" name="radTrafficOff" android1:layout_width="wrap_content" android1:layout_height="wrap_content">Traffic Off</string>
     <string android1:id="@+id/string1" name="strChangeSettings" android1:layout_width="wrap_content" android1:layout_height="wrap_content">Change Settings</string>
     <string android1:id="@+id/string1" name="strDefaultSettings" android1:layout_width="wrap_content" android1:layout_height="wrap_content">Default Settings</string>
-    <string android1:id="@+id/string1" name="action_track" android1:layout_width="wrap_content" android1:layout_height="wrap_content">Time Track</string>
-    <string android1:id="@+id/string1" name="action_track_start" android1:layout_width="wrap_content" android1:layout_height="wrap_content">Start Time Track</string>
-    <string android1:id="@+id/string1" name="action_track_stop" android1:layout_width="wrap_content" android1:layout_height="wrap_content">Stop Time Track</string>
-    <string android1:id="@+id/string1" name="action_track_open" android1:layout_width="wrap_content" android1:layout_height="wrap_content">Open Time Track</string>
-    <string android1:id="@+id/string1" name="action_track_save" android1:layout_width="wrap_content" android1:layout_height="wrap_content">Save Time Track</string> 
+    <string android1:id="@+id/string1" name="action_time_track" android1:layout_width="wrap_content" android1:layout_height="wrap_content">Time Track</string>
+    <string android1:id="@+id/string1" name="action_time_track_start" android1:layout_width="wrap_content" android1:layout_height="wrap_content">Start Time Track</string>
+    <string android1:id="@+id/string1" name="action_time_track_stop" android1:layout_width="wrap_content" android1:layout_height="wrap_content">Stop Time Track</string>
+    <string android1:id="@+id/string1" name="action_time_track_open" android1:layout_width="wrap_content" android1:layout_height="wrap_content">Open Time Track</string>
+    <string android1:id="@+id/string1" name="action_time_track_save" android1:layout_width="wrap_content" android1:layout_height="wrap_content">Save Time Track</string> 
     <string android1:id="@+id/string1" name="action_position_track" android1:layout_width="wrap_content" android1:layout_height="wrap_content">Pos. Track</string>
     <string android1:id="@+id/string1" name="action_position_track_start" android1:layout_width="wrap_content" android1:layout_height="wrap_content">Start Pos. Track</string>
     <string android1:id="@+id/string1" name="action_position_track_stop" android1:layout_width="wrap_content" android1:layout_height="wrap_content">Stop Pos. Track</string>
+    <string android1:id="@+id/string1" name="action_mark_location" android1:layout_width="wrap_content" android1:layout_height="wrap_content">Mark Location</string>
     <string android1:id="@+id/string1" name="action_position_track_open" android1:layout_width="wrap_content" android1:layout_height="wrap_content">Open Pos. Track</string>
     <string android1:id="@+id/string1" name="action_position_track_save" android1:layout_width="wrap_content" android1:layout_height="wrap_content">Save Pos. Track</string> 
     <string name="title_activity_track">TrackActivity</string>

@@ -102,6 +102,20 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 	  private static final int RECORDER_CHANNELS = AudioFormat.CHANNEL_IN_MONO;
 	  private static final int RECORDER_AUDIO_ENCODING = AudioFormat.ENCODING_PCM_16BIT;
 	  
+	  //  This will store locations
+	  ArrayList<LocationItem> locations = new ArrayList<LocationItem>();
+	  
+	  //  This will be used to change the visibility of menu items
+	  MenuItem menuPositionTrackStart;
+	  MenuItem menuPositionTrackStop;
+	  MenuItem menuMarkLocation;	  
+	  MenuItem menuPositionTrackOpen;
+	  MenuItem menuPositionTrackSave;
+
+	  MenuItem menuTimeTrackStart;
+	  MenuItem menuTimeTrackStop;	  
+	  MenuItem menuTimeTrackOpen;
+	  MenuItem menuTimeTrackSave;
 	  
 	  @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -195,6 +209,18 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
+	
+		menuPositionTrackStart = menu.findItem(R.id.action_position_track_start); 
+		menuPositionTrackStop = menu.findItem(R.id.action_position_track_stop); 
+		menuMarkLocation = menu.findItem(R.id.action_mark_location); 		
+		menuPositionTrackOpen = menu.findItem(R.id.action_position_track_open); 
+		menuPositionTrackSave = menu.findItem(R.id.action_position_track_save); 		
+
+		menuTimeTrackStart = menu.findItem(R.id.action_time_track_start); 
+		menuTimeTrackStop = menu.findItem(R.id.action_time_track_stop); 
+		menuTimeTrackOpen = menu.findItem(R.id.action_time_track_open); 
+		menuTimeTrackSave = menu.findItem(R.id.action_time_track_save); 		
+
 		return true;
 	}
 
@@ -464,9 +490,33 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
             
 			break;
 
-			
 		//  New code to for position tracking
+		//  Start the tracking
 		case R.id.action_position_track_start:
+    	    Toast.makeText(getBaseContext(), "Start voice tracking", Toast.LENGTH_SHORT).show(); 			
+
+    	    
+    	    menuPositionTrackStart.setVisible(false);
+    	    menuPositionTrackStop.setVisible(true);    	    
+    	    menuMarkLocation.setVisible(true);
+    	    menuPositionTrackOpen.setVisible(false);
+    	    menuPositionTrackSave.setVisible(false);    	    
+    	    break;
+
+    	    
+		// Stop the tracking	
+		case R.id.action_position_track_stop:
+    	    Toast.makeText(getBaseContext(), "Stop voice tracking", Toast.LENGTH_SHORT).show(); 
+    	    
+    	    menuPositionTrackStart.setVisible(true);
+    	    menuPositionTrackStop.setVisible(false);   
+    	    menuMarkLocation.setVisible(false);    	    
+    	    menuPositionTrackOpen.setVisible(true);
+    	    menuPositionTrackSave.setVisible(true);
+    	    break;
+			
+		//  mark the location
+		case R.id.action_mark_location:
 			
 			positionTracking = true;
 
@@ -484,8 +534,12 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 			
 			//while(positionTracking == true) {
 				Intent i = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-				i.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, "en-US");
-				i.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS,10);				
+				//  This is how the original version had it. 
+				//i.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, "en-US");
+				//  Another tutorial had this, which also worked maybe even better
+				i.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+				// Not sure what this was doing exactly.  Not in my other demo version so I took it out
+				//i.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS,10);				
 				try {
 					startActivityForResult(i, REQUEST_OK);
 				} catch(Exception e) {
@@ -515,10 +569,14 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 			
 			break;
 			
-		case R.id.action_track_start:	
+		case R.id.action_time_track_start:	
 
     	    Toast.makeText(getBaseContext(), "Start Tracking!", Toast.LENGTH_SHORT).show();    	    
-
+    		
+    	    menuTimeTrackStart.setVisible(false);
+    	    menuTimeTrackStop.setVisible(true);
+    	    menuTimeTrackSave.setVisible(false);
+    	    menuTimeTrackOpen.setVisible(false);    	    
 
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     	    //final PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
@@ -565,18 +623,22 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
             t.start();   	    
     	    
 			break;
-		case R.id.action_track_stop:	
+		case R.id.action_time_track_stop:	
 
     	    Toast.makeText(getBaseContext(), "Stop Tracking!", Toast.LENGTH_SHORT).show();    	    
 
-
+    	    menuTimeTrackStart.setVisible(true);
+    	    menuTimeTrackStop.setVisible(false);
+    	    menuTimeTrackSave.setVisible(true);
+    	    menuTimeTrackOpen.setVisible(true); 
+    	    
             //this.mWakeLock.release();
             //super.onDestroy();    	    
     	    
     	    
     	    keepTracking=false;
 			break;			
-		case R.id.action_track_save:	
+		case R.id.action_time_track_save:	
 			//  This will save the user's track
 			
 			
@@ -655,11 +717,14 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
         map.addMarker(new MarkerOptions()
                 .title("Current Location")    	
         		.position(newLatLng)
-        		.snippet("Time=" + (currentTime-startTime)/1000)
+        		.snippet("Time=" + (currentTime-startTime)/1000 + "Altitude=" + pAlt)
         		.icon(BitmapDescriptorFactory
         		.fromResource(R.drawable.smiley1)
         		));    	
-    			
+
+        //  Will save location information into a location object
+        locations.add(new LocationItem(pLat, pLong, (currentTime-startTime)/1000, pAlt, "smiley1"));        
+        
         		// both of these worked
         		//.fromResource(R.drawable.blackberry)
         		//.fromResource(R.drawable.grapes)
@@ -705,6 +770,8 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 	    			
 	    			LatLng newLatLng = new LatLng(pLat, pLong);
 
+	    			
+	    			
 	    			if(thingsYouSaid.get(0).equals("done") ) {
 	    				positionTracking = false;
 	    			}	    	    	
@@ -717,6 +784,8 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 	    						.snippet("test")
 	    						.icon(BitmapDescriptorFactory
 	    								.fromResource(R.drawable.grapes)));
+	    				
+		    	        locations.add(new LocationItem(pLat, pLong, 0, pAlt, "grapes"));
 	    			}
 	    			if(thingsYouSaid.get(0).equals("blackberry")||thingsYouSaid.get(0).equals("blackberries") ) {
 	    				Marker mti = map.addMarker(new MarkerOptions().position(newLatLng)
@@ -726,6 +795,8 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 	    						.snippet("test")
 	    						.icon(BitmapDescriptorFactory
 	    								.fromResource(R.drawable.blackberry)));
+
+		    	        locations.add(new LocationItem(pLat, pLong, 0, pAlt, "blackberries"));	    				
 	    			}
 	    				    			
 	        }

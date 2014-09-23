@@ -50,8 +50,16 @@
 		    	android:id="@+id/action_position_track_stop"
         		android:orderInCategory="100"
         		android:title="@string/action_position_track_stop"
+				android:visible="false"
         		app:showAsAction="always">
 		    </item>		   		    
+		    <item
+		    	android:id="@+id/action_mark_location"
+        		android:orderInCategory="100"
+        		android:title="@string/action_mark_location"
+				android:visible="false"
+        		app:showAsAction="always">
+		    </item>	
 		    <item
 		    	android:id="@+id/action_position_track_open"
         		android:orderInCategory="100"
@@ -62,6 +70,7 @@
 		    	android:id="@+id/action_position_track_save"
         		android:orderInCategory="100"
         		android:title="@string/action_position_track_save"
+				android:visible="false"
         		app:showAsAction="never">
 		    </item>			    
 		</menu>
@@ -69,33 +78,35 @@
 	</item>
 	
 	<item
-		android:id="@+id/action_track"
+		android:id="@+id/action_time_track"
         android:orderInCategory="100"
-        android:title="@string/action_track"
+        android:title="@string/action_time_track"
         app:showAsAction="always">
 		<menu>
 		    <item
-		    	android:id="@+id/action_track_start"
+		    	android:id="@+id/action_time_track_start"
         		android:orderInCategory="100"
-        		android:title="@string/action_track_start"
+        		android:title="@string/action_time_track_start"
         		app:showAsAction="always">
 		    </item>
 		    <item
-		    	android:id="@+id/action_track_stop"
+		    	android:id="@+id/action_time_track_stop"
         		android:orderInCategory="100"
-        		android:title="@string/action_track_stop"
+        		android:title="@string/action_time_track_stop"
+				android:visible="false"
         		app:showAsAction="always">
 		    </item>		   		    
 		    <item
-		    	android:id="@+id/action_track_open"
+		    	android:id="@+id/action_time_track_open"
         		android:orderInCategory="100"
-        		android:title="@string/action_track_open"
+        		android:title="@string/action_time_track_open"
         		app:showAsAction="always">
 		    </item>	
 		    <item
-		    	android:id="@+id/action_track_save"
+		    	android:id="@+id/action_time_track_save"
         		android:orderInCategory="100"
-        		android:title="@string/action_track_save"
+        		android:title="@string/action_time_track_save"
+				android:visible="false"
         		app:showAsAction="never">
 		    </item>			    
 		</menu>
