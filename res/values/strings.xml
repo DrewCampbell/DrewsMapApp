@@ -46,7 +46,12 @@
     <string android1:id="@+id/string1" name="action_mark_location" android1:layout_width="wrap_content" android1:layout_height="wrap_content">Mark Location</string>
     <string android1:id="@+id/string1" name="action_position_track_open" android1:layout_width="wrap_content" android1:layout_height="wrap_content">Open Pos. Track</string>
     <string android1:id="@+id/string1" name="action_position_track_save" android1:layout_width="wrap_content" android1:layout_height="wrap_content">Save Pos. Track</string> 
+
+    <string android1:id="@+id/string1" name="open_file" android1:layout_width="wrap_content" android1:layout_height="wrap_content">Open File</string> 
+	<string android1:id="@+id/string1" name="save_file" android1:layout_width="wrap_content" android1:layout_height="wrap_content">Save File</string> 
     <string name="title_activity_track">TrackActivity</string>
+    <string android1:id="@+id/string1" name="file_name" android1:layout_width="wrap_content" android1:layout_height="wrap_content">File Name</string> 
+    	
     <string android1:layout_height="wrap_content" android1:id="@+id/string1" android1:layout_width="wrap_content" name="strHelp5">The default zoom start value is 18, but this can be reset using the settings tab.  The range for these values are 1=world view to 21= streeet view.  Also in the settings tab, you can set the map to show traffic on highways and major streets.  By default, this value is false.</string>
 
 </resources>

@@ -14,12 +14,11 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
@@ -558,16 +557,100 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 			//	Toast.makeText(this, "word not detected", Toast.LENGTH_LONG).show();				
 			//}
 			
-
-			
-		
-			
-			
-			
-			
 			
 			
 			break;
+	
+		case R.id.action_position_track_open:
+			
+		    final Dialog dialogOpen = new Dialog(this);
+		    dialogOpen.setContentView(R.layout.customopen);
+			
+			
+			final Button btnOpen = (Button) dialogOpen.findViewById(R.id.btnOpen);
+						
+			btnOpen.setOnClickListener(new View.OnClickListener() {
+				
+				
+                @Override
+                public void onClick(View v) {
+                	
+		    	    Toast.makeText(getBaseContext(), "Open Clicked", Toast.LENGTH_SHORT).show();                  	
+                	
+                }
+           
+
+                
+            });			
+			
+			
+			
+			final Button btnCancelOpen = (Button) dialogOpen.findViewById(R.id.btnCancel);			
+			
+			
+			btnCancelOpen.setOnClickListener(new View.OnClickListener() {
+			
+                @Override
+                public void onClick(View v) {			
+
+		    	    Toast.makeText(getBaseContext(), "Cancel Clicked", Toast.LENGTH_SHORT).show();    	    
+
+        			dialogOpen.dismiss();			
+			
+                }
+            });
+		    
+		    dialogOpen.show();
+			
+			break;
+			
+		case R.id.action_position_track_save:
+			
+		    final Dialog dialogSave = new Dialog(this);
+		    dialogSave.setContentView(R.layout.customsave);
+	
+
+			final Button btnSave = (Button) dialogSave.findViewById(R.id.btnSave);
+			
+			btnSave.setOnClickListener(new View.OnClickListener() {
+				
+				
+                @Override
+                public void onClick(View v) {
+                	
+		    	    Toast.makeText(getBaseContext(), "Save Clicked", Toast.LENGTH_SHORT).show();                  	
+                	
+                }
+           
+
+                
+            });	
+		    
+		    
+		    
+		    
+		    final Button btnCancelSave = (Button) dialogSave.findViewById(R.id.btnCancel);
+			
+			
+			btnCancelSave.setOnClickListener(new View.OnClickListener() {
+			
+                @Override
+                public void onClick(View v) {			
+
+		    	    Toast.makeText(getBaseContext(), "Cancel Clicked", Toast.LENGTH_SHORT).show();    	    
+
+        			dialogSave.dismiss();			
+			
+                }
+            });
+		    
+		    dialogSave.show();
+			
+			
+			break;
+			
+			
+			
 			
 		case R.id.action_time_track_start:	
 
@@ -638,33 +721,120 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
     	    
     	    keepTracking=false;
 			break;			
+		case R.id.action_time_track_open:	
+						
+			    final Dialog dialogOpen2 = new Dialog(this);
+			    dialogOpen2.setContentView(R.layout.customopen);
+
+			    
+			    
+				final Button btnOpen2 = (Button) dialogOpen2.findViewById(R.id.btnOpen);
+				
+				btnOpen2.setOnClickListener(new View.OnClickListener() {
+					
+					
+	                @Override
+	                public void onClick(View v) {
+	                	
+			    	    Toast.makeText(getBaseContext(), "Open Clicked", Toast.LENGTH_SHORT).show();                  	
+	                
+			    	    DatabaseConnector db = new DatabaseConnector(getBaseContext());
+			    	    
+			    	    //Cursor cursor = db.getAllContacts();
+			    	    
+			    	    //if (cursor.moveToFirst()) {
+			    	    //    while ( !cursor.isAfterLast() ) {
+			    	    //        Toast.makeText(getBaseContext(), "Table Name=> " + cursor.getString(0), Toast.LENGTH_LONG).show();
+			    	    //        cursor.moveToNext();
+			    	    //    }
+			    	    //}
+			    	    
+			    	    
+			    	    Toast.makeText(getBaseContext(), "gets here", Toast.LENGTH_SHORT).show();  			    	    
+	                }
+	           
+
+	                
+	            });		
+			    
+			    
+			    
+			    
+			    
+			    
+			    
+			    
+			    
+			    
+				final Button btnCancelOpen2 = (Button) dialogOpen2.findViewById(R.id.btnCancel);
+				
+				btnCancelOpen2.setOnClickListener(new View.OnClickListener() {
+				
+	                @Override
+	                public void onClick(View v) {			
+
+			    	    Toast.makeText(getBaseContext(), "Cancel Clicked", Toast.LENGTH_SHORT).show();    	    
+
+	        			dialogOpen2.dismiss();			
+				
+	                }
+	            });
+			    
+			    dialogOpen2.show();
+			    
+			break;
 		case R.id.action_time_track_save:	
 			//  This will save the user's track
 			
+		    final Dialog dialogSave2 = new Dialog(this);
+		    dialogSave2.setContentView(R.layout.customsave);
+
+		    
+		    
+		    
+		    
+			final Button btnSave2 = (Button) dialogSave2.findViewById(R.id.btnSave);
 			
-			AlertDialog.Builder adSave = new AlertDialog.Builder(this);
+			btnSave2.setOnClickListener(new View.OnClickListener() {
+				
+				
+                @Override
+                public void onClick(View v) {
+                	
+		    	    Toast.makeText(getBaseContext(), "Save Clicked", Toast.LENGTH_SHORT).show();                  	
+                	
+                }
+           
+
+                
+            });			    
+		    
+		    
+		    
+		    
+		    
+		    
+		    
+		    
+			final Button btnCancelSave2 = (Button) dialogSave2.findViewById(R.id.btnCancel);
 			
-			adSave.setTitle("Save");
-			adSave.setMessage("Save File");
-			adSave.setCancelable(false);
+			btnCancelSave2.setOnClickListener(new View.OnClickListener() {
+			
+                @Override
+                public void onClick(View v) {			
+
+		    	    Toast.makeText(getBaseContext(), "Cancel Clicked", Toast.LENGTH_SHORT).show();    	    
+
+        			dialogSave2.dismiss();			
+			
+                }
+            });
+		    
+		    dialogSave2.show();			
 
 
-		    adSave.setPositiveButton("OK", new DialogInterface.OnClickListener()
-		    {
-		        @Override
-		        public void onClick(DialogInterface dialog, int whichButton)
-		        {
-		         
-		        }
-		    });
 			
 
-			
-			
-			adSave.create();
-						
-			
-			adSave.show();
 
 			
 			
