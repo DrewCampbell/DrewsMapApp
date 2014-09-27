@@ -12,7 +12,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginTop="10dp"
    
-        android:visibility="invisible" />
+        android:visibility="visible" />
 
     <EditText
         android:id="@+id/txtFileName"

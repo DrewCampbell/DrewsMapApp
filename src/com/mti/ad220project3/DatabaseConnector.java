@@ -1,5 +1,7 @@
 package com.mti.ad220project3;
 
+import com.google.android.gms.internal.db;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -13,17 +15,65 @@ public class DatabaseConnector {
 	
 	//  database name
 	//  private static final String DATABASE_NAME = "UserLocationInfo";
-	private static final String DATABASE_NAME = "UserContacts";	
+	private static final String DATABASE_NAME = "locationinformation";
+	private static final int DATABASE_VERSION = 1;
 	private SQLiteDatabase database;  // database object
 	private DatabaseOpenHelper databaseOpenHelper;  //  database helper
+	private Context ctx;
+	
+	
 	
 	//  public constructor for DatabaseConnector
 	public DatabaseConnector(Context context) {
 		// create a new DatabaseOpenHelper
-		databaseOpenHelper = new DatabaseOpenHelper(context, DATABASE_NAME, null, 1); 
+		this.ctx = context;
+		databaseOpenHelper = new DatabaseOpenHelper(context); 
 	
 	}  //  end DatabaseConnector constructor
 	
+
+	
+	
+	private class DatabaseOpenHelper extends SQLiteOpenHelper {
+	
+		//  public constructor
+		public DatabaseOpenHelper(Context context) {
+			super(context, DATABASE_NAME, null, DATABASE_VERSION);
+		}
+
+		// creates table when the database is created
+		@Override
+		public void onCreate(SQLiteDatabase db) {
+			// query to create a new table
+			// Let's comment this out to see what happens
+			//  This seems to do nothing!
+			
+			String createQuery = "CREATE TABLE testlocations" +
+			"(_locid integer primary key autoincrement," +
+			"latitude double, longitude double, seconds long, " +
+			"altitude integer, image string);";
+			
+			try {
+				db.execSQL(createQuery);  //execute the query
+			} catch(SQLException e) {
+				e.printStackTrace();
+				Toast.makeText(ctx, "Errored connecting to database", Toast.LENGTH_LONG).show();
+			}
+				
+		}  // end method onCreate
+
+		
+		
+		@Override
+		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+			db.execSQL("DROP TABLE IF EXISTS testlocations");
+			
+			onCreate(db);
+			
+		}  // end method onUpgrade
+		
+	}  //  end class DatabaseOpenHelper
+
 	//  open the database connection
 	public void open() throws SQLException {
 		//  create or open a database for reading/writing
@@ -38,19 +88,43 @@ public class DatabaseConnector {
 	
 
 	//  inserts a new contact in the database
-	public void insertContact(String name, String email, String phone, String state, String city) {
+	public void insertData(double latitude, double longitude, long seconds, int altitude, String image) {
 		
-		ContentValues newContact = new ContentValues();
-		newContact.put("name", name);
-		newContact.put("email", email);
-		newContact.put("phone", phone);
-		newContact.put("street", state);
-		newContact.put("city", city);
+		ContentValues newPointInfo = new ContentValues();
+		newPointInfo.put("latitude", latitude);
+		newPointInfo.put("longitude", longitude);
+		newPointInfo.put("seconds", seconds);
+		newPointInfo.put("altitude", altitude);
+		newPointInfo.put("image", image);
 		
-		open();  //  open the database
-		database.insert("contacts", null, newContact);
-		close();  // close the database
-	}  // end method insertContact
+		
+		//open();  //  open the database
+		database.insert("testlocations", null, newPointInfo);
+		//close();  // close the database
+	}  // end method insertContact	
+
+	
+	public Cursor returnData() {
+		return database.query("testlocations", new String[] {"_locid", "latitude", "longitude", "seconds", "altitude", "image"}, null, null, null, null, null);
+	}
+	
+	public void clearData() {
+		//database.execSQL("delete * from testlocations");
+		database.delete("testlocations", null, null);
+	
+	}
+	
+	
+	
+	public Cursor listAllTables() {
+		Cursor c;
+		
+		c = database.rawQuery("SELECT name FROM sqlite_master WHERE type='table'", null);
+	
+		
+		return c;
+	}
+	
 	
 	
 	// updates a contact in the database
@@ -74,36 +148,8 @@ public class DatabaseConnector {
 		database.delete("contacts", "_id=" + id, null);
 	}
 	
-
 	
 	
 	
-	
-	private class DatabaseOpenHelper extends SQLiteOpenHelper {
-	
-		//  public constructor
-		public DatabaseOpenHelper(Context context, String name, CursorFactory factory, int version) {
-			super(context, name, factory, version);
-		}
-
-		// creates table when the database is created
-		@Override
-		public void onCreate(SQLiteDatabase db) {
-			// query to create a new table
-			String createQuery = "CREATE TABLE contacts" +
-			"(_id integer primary key autoincrement," +
-			"name TEXT, email TEXT, phone TEXT, " +
-			"street TEXT, city TEXT);";
-			
-			db.execSQL(createQuery);  //execute the query
-		}  // end method onCreate
-
-		
-		@Override
-		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-			
-		}  // end method onUpgrade
-		
-	}  //  end class DatabaseOpenHelper
 	
 }  // end class DatabaseConnector

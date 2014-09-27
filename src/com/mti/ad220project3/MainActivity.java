@@ -38,8 +38,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -186,6 +188,13 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
     	    
     	    
     }
+
+	@Override  
+	protected void onDestroy() {
+		// We will close database here
+		
+	}
+	  
 
     public void moveToLatLong(GoogleMap map, double lat, double lng) {
     	
@@ -723,13 +732,37 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 			break;			
 		case R.id.action_time_track_open:	
 						
-			    final Dialog dialogOpen2 = new Dialog(this);
+			    final Dialog dialogOpen2 = new Dialog(this);			    
 			    dialogOpen2.setContentView(R.layout.customopen);
+			    
+			    final Spinner spinnerFilesOpen2 = (Spinner) dialogOpen2.findViewById(R.id.spinnerfiles);
+
+
+			    //  Set the spinner to list the tables
+			    ArrayAdapter adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
+			    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);		    
+			    spinnerFilesOpen2.setAdapter(adapter);
 
 			    
+			    //  Here we will show all the tables in the database			    
+			    DatabaseConnector database = new DatabaseConnector(getBaseContext());
+			    database.open();
+			    Cursor c = database.listAllTables();
+	    	    if (c.moveToFirst()) {
+	    	        while ( !c.isAfterLast() ) {
+	    	            adapter.add(c.getString(0));
+	    	            c.moveToNext();
+	    	        }
+	    	    }
 			    
-				final Button btnOpen2 = (Button) dialogOpen2.findViewById(R.id.btnOpen);
-				
+	    	    
+			    
+	    	    
+			    database.close();
+
+	    	    
+				final Button btnOpen2 = (Button) dialogOpen2.findViewById(R.id.btnOpen);	    	    
+	    	    
 				btnOpen2.setOnClickListener(new View.OnClickListener() {
 					
 					
@@ -737,20 +770,42 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 	                public void onClick(View v) {
 	                	
 			    	    Toast.makeText(getBaseContext(), "Open Clicked", Toast.LENGTH_SHORT).show();                  	
-	                
+			    	    Toast.makeText(getBaseContext(), "Clicked = " + spinnerFilesOpen2.getSelectedItem(), Toast.LENGTH_SHORT).show();
+			    	    
 			    	    DatabaseConnector db = new DatabaseConnector(getBaseContext());
 			    	    
-			    	    //Cursor cursor = db.getAllContacts();
+			    	    db.open();
 			    	    
-			    	    //if (cursor.moveToFirst()) {
-			    	    //    while ( !cursor.isAfterLast() ) {
-			    	    //        Toast.makeText(getBaseContext(), "Table Name=> " + cursor.getString(0), Toast.LENGTH_LONG).show();
-			    	    //        cursor.moveToNext();
-			    	    //    }
-			    	    //}
+			    	    Cursor c = db.listAllTables();
+	
 			    	    
+			    	    
+			    	    if (c.moveToFirst()) {
+			    	        while ( !c.isAfterLast() ) {
+			    	            Toast.makeText(getBaseContext(), "Table Name=> "+c.getString(0), Toast.LENGTH_LONG).show();
+			    	            c.moveToNext();
+			    	        }
+			    	    }
+			    	    
+			    	    
+			    	    db.clearData();
+			    	    
+			    	    db.insertData(38.661269, -121.342058, 30, 12, "blackberry");
+			    	    db.insertData(38.677959, -121.176058, 150, 102, "grape");			    	    
+			    	    
+			    	    //  Right now it errors out when I run this
+			    	    c = db.returnData();
+
+			    	    if (c.moveToFirst()) {
+			    	        while ( !c.isAfterLast() ) {
+			    	            Toast.makeText(getBaseContext(), "LocID:"+ c.getString(0) +"Latitude:"+ c.getString(1) + ", Longitude:" + c.getString(2) + ", Seconds:" + c.getString(3) + "Alititude:" + c.getString(4) + "Image:" + c.getString(5), Toast.LENGTH_LONG).show();
+			    	            c.moveToNext();
+			    	        }
+			    	    }
 			    	    
 			    	    Toast.makeText(getBaseContext(), "gets here", Toast.LENGTH_SHORT).show();  			    	    
+
+			    	    db.close();
 	                }
 	           
 
