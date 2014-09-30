@@ -109,7 +109,22 @@
 				android:visible="false"
         		app:showAsAction="never">
 		    </item>			    
-		</menu>
+		    <item
+		    	android:id="@+id/action_time_track_create"
+        		android:orderInCategory="100"
+        		android:title="@string/action_time_track_create"
+				android:visible="true"
+        		app:showAsAction="never">
+		    </item>	
+		    <item
+		    	android:id="@+id/action_time_track_drop"
+        		android:orderInCategory="100"
+        		android:title="@string/action_time_track_drop"
+				android:visible="true"
+        		app:showAsAction="never">
+		    </item>			    
+		    
+		    		</menu>
 	    
 	</item>
 	<item

@@ -40,7 +40,9 @@
     <string android1:id="@+id/string1" name="action_time_track_stop" android1:layout_width="wrap_content" android1:layout_height="wrap_content">Stop Time Track</string>
     <string android1:id="@+id/string1" name="action_time_track_open" android1:layout_width="wrap_content" android1:layout_height="wrap_content">Open Time Track</string>
     <string android1:id="@+id/string1" name="action_time_track_save" android1:layout_width="wrap_content" android1:layout_height="wrap_content">Save Time Track</string> 
-    <string android1:id="@+id/string1" name="action_position_track" android1:layout_width="wrap_content" android1:layout_height="wrap_content">Pos. Track</string>
+	<string android1:id="@+id/string1" name="action_time_track_create" android1:layout_width="wrap_content" android:layout_height="wrap_content">Create Table</string>
+	<string android1:id="@+id/string1" name="action_time_track_drop" android1:layout_width="wrap_content" android:layout_height="wrap_content">Drop Table</string>
+	<string android1:id="@+id/string1" name="action_position_track" android1:layout_width="wrap_content" android1:layout_height="wrap_content">Pos. Track</string>
     <string android1:id="@+id/string1" name="action_position_track_start" android1:layout_width="wrap_content" android1:layout_height="wrap_content">Start Pos. Track</string>
     <string android1:id="@+id/string1" name="action_position_track_stop" android1:layout_width="wrap_content" android1:layout_height="wrap_content">Stop Pos. Track</string>
     <string android1:id="@+id/string1" name="action_mark_location" android1:layout_width="wrap_content" android1:layout_height="wrap_content">Mark Location</string>

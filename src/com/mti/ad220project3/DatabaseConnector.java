@@ -14,12 +14,12 @@ import android.widget.Toast;
 public class DatabaseConnector {
 	
 	//  database name
-	//  private static final String DATABASE_NAME = "UserLocationInfo";
 	private static final String DATABASE_NAME = "locationinformation";
 	private static final int DATABASE_VERSION = 1;
 	private SQLiteDatabase database;  // database object
 	private DatabaseOpenHelper databaseOpenHelper;  //  database helper
 	private Context ctx;
+
 	
 	
 	
@@ -39,6 +39,9 @@ public class DatabaseConnector {
 		//  public constructor
 		public DatabaseOpenHelper(Context context) {
 			super(context, DATABASE_NAME, null, DATABASE_VERSION);
+
+			//  Gets here
+			//Toast.makeText(ctx, "Helper Constructor", Toast.LENGTH_LONG).show();			
 		}
 
 		// creates table when the database is created
@@ -47,6 +50,9 @@ public class DatabaseConnector {
 			// query to create a new table
 			// Let's comment this out to see what happens
 			//  This seems to do nothing!
+
+			//  But never gets here
+			Toast.makeText(ctx, "Here's where we try to create the table", Toast.LENGTH_LONG).show();			
 			
 			String createQuery = "CREATE TABLE testlocations" +
 			"(_locid integer primary key autoincrement," +
@@ -75,9 +81,10 @@ public class DatabaseConnector {
 	}  //  end class DatabaseOpenHelper
 
 	//  open the database connection
-	public void open() throws SQLException {
+	public DatabaseConnector open() throws SQLException {
 		//  create or open a database for reading/writing
 		database = databaseOpenHelper.getWritableDatabase();
+		return this;
 	}  // end method open
 	
 	//  close the database connection
@@ -85,10 +92,13 @@ public class DatabaseConnector {
 		if(database != null)
 			database.close();  // close the database connection
 	}  // end method close
+
+	
+
 	
 
 	//  inserts a new contact in the database
-	public void insertData(double latitude, double longitude, long seconds, int altitude, String image) {
+	public long insertData(double latitude, double longitude, long seconds, double altitude, String image) {
 		
 		ContentValues newPointInfo = new ContentValues();
 		newPointInfo.put("latitude", latitude);
@@ -97,10 +107,7 @@ public class DatabaseConnector {
 		newPointInfo.put("altitude", altitude);
 		newPointInfo.put("image", image);
 		
-		
-		//open();  //  open the database
-		database.insert("testlocations", null, newPointInfo);
-		//close();  // close the database
+		return database.insertOrThrow("testlocations", null, newPointInfo);
 	}  // end method insertContact	
 
 	
@@ -114,13 +121,43 @@ public class DatabaseConnector {
 	
 	}
 	
+	public void createTable() {
+
+		
+		String createQuery = "CREATE TABLE testlocations2" +
+		"(_locid integer primary key autoincrement," +
+		"latitude double, longitude double, seconds long, " +
+		"altitude integer, image string);";
+		
+		try {
+			database.execSQL(createQuery);  //execute the query
+		} catch(SQLException e) {
+			e.printStackTrace();
+			Toast.makeText(ctx, "Errored connecting to database", Toast.LENGTH_LONG).show();
+		}
+		
+	}
+	
+
+	public void dropTable() {
+
+		
+		String createQuery = "DROP TABLE testlocations2";
+		
+		try {
+			database.execSQL(createQuery);  //execute the query
+		} catch(SQLException e) {
+			e.printStackTrace();
+			Toast.makeText(ctx, "Errored connecting to database", Toast.LENGTH_LONG).show();
+		}
+	}
 	
 	
 	public Cursor listAllTables() {
 		Cursor c;
 		
 		c = database.rawQuery("SELECT name FROM sqlite_master WHERE type='table'", null);
-	
+		//c = database.rawQuery("SELECT name FROM locationinformation WHERE type='table'", null);	
 		
 		return c;
 	}

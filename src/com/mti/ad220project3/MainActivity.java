@@ -118,6 +118,9 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 	  MenuItem menuTimeTrackOpen;
 	  MenuItem menuTimeTrackSave;
 	  
+	  DatabaseConnector databaseConnect;  //  will be used to connect to our database
+	  Cursor cursor;  //  Cursor to hold returns from database
+	  
 	  @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -193,7 +196,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 	protected void onDestroy() {
 		// We will close database here
 		
-	}
+	}                                                          
 	  
 
     public void moveToLatLong(GoogleMap map, double lat, double lng) {
@@ -739,26 +742,24 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 
 
 			    //  Set the spinner to list the tables
-			    ArrayAdapter adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
-			    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);		    
-			    spinnerFilesOpen2.setAdapter(adapter);
+			    ArrayAdapter adapterOpen = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
+			    adapterOpen.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);		    
+			    spinnerFilesOpen2.setAdapter(adapterOpen);
 
 			    
 			    //  Here we will show all the tables in the database			    
-			    DatabaseConnector database = new DatabaseConnector(getBaseContext());
-			    database.open();
-			    Cursor c = database.listAllTables();
-	    	    if (c.moveToFirst()) {
-	    	        while ( !c.isAfterLast() ) {
-	    	            adapter.add(c.getString(0));
-	    	            c.moveToNext();
+			    databaseConnect = new DatabaseConnector(getBaseContext());
+			    databaseConnect.open();
+			    cursor = databaseConnect.listAllTables();
+	    	    if (cursor.moveToFirst()) {
+	    	        while ( !cursor.isAfterLast() ) {
+	    	            adapterOpen.add(cursor.getString(0));
+	    	            cursor.moveToNext();
 	    	        }
 	    	    }
-			    
+			    	    	   
 	    	    
-			    
-	    	    
-			    database.close();
+			    databaseConnect.close();
 
 	    	    
 				final Button btnOpen2 = (Button) dialogOpen2.findViewById(R.id.btnOpen);	    	    
@@ -772,40 +773,64 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 			    	    Toast.makeText(getBaseContext(), "Open Clicked", Toast.LENGTH_SHORT).show();                  	
 			    	    Toast.makeText(getBaseContext(), "Clicked = " + spinnerFilesOpen2.getSelectedItem(), Toast.LENGTH_SHORT).show();
 			    	    
-			    	    DatabaseConnector db = new DatabaseConnector(getBaseContext());
+			    	    databaseConnect = new DatabaseConnector(getBaseContext());
 			    	    
-			    	    db.open();
-			    	    
-			    	    Cursor c = db.listAllTables();
+			    	    databaseConnect.open();
+			    	
+			    	   
+			    	    cursor = databaseConnect.listAllTables();
 	
 			    	    
 			    	    
-			    	    if (c.moveToFirst()) {
-			    	        while ( !c.isAfterLast() ) {
-			    	            Toast.makeText(getBaseContext(), "Table Name=> "+c.getString(0), Toast.LENGTH_LONG).show();
-			    	            c.moveToNext();
+			    	    if (cursor.moveToFirst()) {
+			    	        while ( !cursor.isAfterLast() ) {
+			    	            Toast.makeText(getBaseContext(), "Table Name=> "+cursor.getString(0), Toast.LENGTH_LONG).show();
+			    	            cursor.moveToNext();
 			    	        }
 			    	    }
 			    	    
 			    	    
-			    	    db.clearData();
-			    	    
-			    	    db.insertData(38.661269, -121.342058, 30, 12, "blackberry");
-			    	    db.insertData(38.677959, -121.176058, 150, 102, "grape");			    	    
+		    	    
 			    	    
 			    	    //  Right now it errors out when I run this
-			    	    c = db.returnData();
+			    	    cursor = databaseConnect.returnData();
 
-			    	    if (c.moveToFirst()) {
-			    	        while ( !c.isAfterLast() ) {
-			    	            Toast.makeText(getBaseContext(), "LocID:"+ c.getString(0) +"Latitude:"+ c.getString(1) + ", Longitude:" + c.getString(2) + ", Seconds:" + c.getString(3) + "Alititude:" + c.getString(4) + "Image:" + c.getString(5), Toast.LENGTH_LONG).show();
-			    	            c.moveToNext();
+			    	    if (cursor.moveToFirst()) {
+			    	        while ( !cursor.isAfterLast() ) {
+			    	            Toast.makeText(getBaseContext(), "LocID:"+ cursor.getString(0) +"Latitude:"+ cursor.getString(1) + ", Longitude:" + cursor.getString(2) + ", Seconds:" + cursor.getString(3) + "Alititude:" + cursor.getString(4) + "Image:" + cursor.getString(5), Toast.LENGTH_LONG).show();
+
+			    	            //  Let's add icons onto map here
+
+			    	        	LatLng newLatLng = new LatLng(cursor.getDouble(1), cursor.getDouble(2));
+			    	        	
+			    	            
+			    	            map.addMarker(new MarkerOptions()
+			    	                    .title("Location")    	
+			    	            		.position(newLatLng)
+			    	            		.snippet("Time=" + cursor.getLong(3) + "Altitude=" + cursor.getDouble(4))
+			    	            		.icon(BitmapDescriptorFactory
+			    	            		.fromResource(R.drawable.smiley1)
+			    	            		));    
+			    	   
+			    	            if(oldLatLng!=null) {
+			    	            	Polyline line = map.addPolyline(new PolylineOptions()
+			    	            	.add(oldLatLng, newLatLng)
+			    	            	.width(5)
+			    	            	.color(Color.RED));
+			    	            }
+			    	            oldLatLng = newLatLng;
+			    	            
+			    	            
+			    	            cursor.moveToNext();
 			    	        }
 			    	    }
 			    	    
 			    	    Toast.makeText(getBaseContext(), "gets here", Toast.LENGTH_SHORT).show();  			    	    
 
-			    	    db.close();
+			    	    databaseConnect.close();
+
+	        			dialogOpen2.dismiss();
+	        			
 	                }
 	           
 
@@ -844,9 +869,31 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 		    final Dialog dialogSave2 = new Dialog(this);
 		    dialogSave2.setContentView(R.layout.customsave);
 
+
+		    final Spinner spinnerFilesSave2 = (Spinner) dialogSave2.findViewById(R.id.spinnerfiles);
+
+
+		    //  Set the spinner to list the tables
+		    ArrayAdapter adapterSave = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
+		    adapterSave.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);		    
+		    spinnerFilesSave2.setAdapter(adapterSave);
+
 		    
+		    //  Here we will show all the tables in the database			    
+
+		    databaseConnect = new DatabaseConnector(getBaseContext());
+		    databaseConnect.open();
+		    cursor = databaseConnect.listAllTables();
+    	    if (cursor.moveToFirst()) {
+    	        while ( !cursor.isAfterLast() ) {
+    	            adapterSave.add(cursor.getString(0));
+    	            cursor.moveToNext();
+    	        }
+    	    }
+		      
+		    databaseConnect.close();		    
 		    
-		    
+		 
 		    
 			final Button btnSave2 = (Button) dialogSave2.findViewById(R.id.btnSave);
 			
@@ -856,8 +903,65 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
                 @Override
                 public void onClick(View v) {
                 	
-		    	    Toast.makeText(getBaseContext(), "Save Clicked", Toast.LENGTH_SHORT).show();                  	
-                	
+		    	    Toast.makeText(getBaseContext(), "Save Clicked", Toast.LENGTH_SHORT).show();                  	 	
+		    	    Toast.makeText(getBaseContext(), "Clicked = " + spinnerFilesSave2.getSelectedItem(), Toast.LENGTH_SHORT).show();
+		    	    
+		    	   
+		    	    databaseConnect = new DatabaseConnector(getBaseContext());
+		    	    databaseConnect.open();
+		    	
+		    	   
+		    	    cursor = databaseConnect.listAllTables();
+
+		    	    
+		    	    
+		    	    if (cursor.moveToFirst()) {
+		    	        while ( !cursor.isAfterLast() ) {
+		    	            Toast.makeText(getBaseContext(), "Table Name=> "+cursor.getString(0), Toast.LENGTH_LONG).show();
+		    	            cursor.moveToNext();
+		    	        }
+		    	    }
+		    	    
+		    	    
+		    	    databaseConnect.clearData();
+
+		    	    double latitude;
+		    	    double longitude;
+		    	    long seconds;
+		    	    double altitude;
+		    	    String image;
+		    	    
+		    	    for (LocationItem location : locations) {
+		    	        latitude = location.getLatitude();
+		    	        longitude = location.getLongitude();
+		    	    	seconds = location.getSeconds();
+		    	    	altitude = location.getAltitude();
+		    	    	image = location.getImage();
+		    	        
+		    	    	databaseConnect.insertData(latitude, longitude, seconds,altitude, image);
+		    	    }
+		    	    
+		    	    
+		    	    
+		    	    //databaseConnect.insertData(38.661269, -121.342058, 30, 12, "blackberry");
+		    	    //databaseConnect.insertData(38.677959, -121.176058, 150, 102, "grape");			    	    
+		    	    
+		    	    //  Right now it errors out when I run this
+		    	    cursor = databaseConnect.returnData();
+
+		    	    if (cursor.moveToFirst()) {
+		    	        while ( !cursor.isAfterLast() ) {
+		    	            Toast.makeText(getBaseContext(), "LocID:"+ cursor.getString(0) +"Latitude:"+ cursor.getString(1) + ", Longitude:" + cursor.getString(2) + ", Seconds:" + cursor.getString(3) + "Alititude:" + cursor.getString(4) + "Image:" + cursor.getString(5), Toast.LENGTH_LONG).show();
+		    	            cursor.moveToNext();
+		    	        }
+		    	    }
+		    	    
+		    	    Toast.makeText(getBaseContext(), "gets here", Toast.LENGTH_SHORT).show();  			    	    
+
+		    	    databaseConnect.close();		    	    
+		    	    
+        			dialogSave2.dismiss();	
+		    	    
                 }
            
 
@@ -886,14 +990,30 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
             });
 		    
 		    dialogSave2.show();			
-
-
+		    break;
+		case R.id.action_time_track_create:	
 			
+    	    Toast.makeText(getBaseContext(), "Create Clicked", Toast.LENGTH_SHORT).show(); 
 
+    	    databaseConnect = new DatabaseConnector(getBaseContext());
+    	    databaseConnect.open();
+			databaseConnect.createTable();    	    
+    	    databaseConnect.close();
+			
+    	    
+    	    break;
+		case R.id.action_time_track_drop:
 
+    	    Toast.makeText(getBaseContext(), "Drop Clicked", Toast.LENGTH_SHORT).show(); 
+
+    	    databaseConnect = new DatabaseConnector(getBaseContext());
+    	    databaseConnect.open();
+    
+    	    databaseConnect.dropTable();
+    	    databaseConnect.close();
+			break;
 			
-			
-			
+			/*  Not sure if this does anything
 			File file;
 			
 			
@@ -913,7 +1033,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 	    		
 	    	}
 
-		
+			*/
 		}
 
 		int id = item.getItemId();

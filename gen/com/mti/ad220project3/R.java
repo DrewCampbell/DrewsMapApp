@@ -1466,7 +1466,7 @@ containing a value of this type.
     }
     public static final class id {
         public static final int RelativeLayout1=0x7f080060;
-        public static final int action_about=0x7f08007e;
+        public static final int action_about=0x7f080080;
         public static final int action_address=0x7f080071;
         public static final int action_bar=0x7f08002e;
         public static final int action_bar_activity_content=0x7f080027;
@@ -1476,7 +1476,7 @@ containing a value of this type.
         public static final int action_bar_subtitle=0x7f080035;
         public static final int action_bar_title=0x7f080034;
         public static final int action_context_bar=0x7f08002f;
-        public static final int action_help=0x7f08007f;
+        public static final int action_help=0x7f080081;
         public static final int action_latlong=0x7f080070;
         public static final int action_mark_location=0x7f080076;
         public static final int action_menu_divider=0x7f080028;
@@ -1491,6 +1491,8 @@ containing a value of this type.
         public static final int action_settings=0x7f08006e;
         public static final int action_thislocation=0x7f080072;
         public static final int action_time_track=0x7f080079;
+        public static final int action_time_track_create=0x7f08007e;
+        public static final int action_time_track_drop=0x7f08007f;
         public static final int action_time_track_open=0x7f08007c;
         public static final int action_time_track_save=0x7f08007d;
         public static final int action_time_track_start=0x7f08007a;
@@ -1713,16 +1715,18 @@ containing a value of this type.
         public static final int action_help=0x7f07003e;
         public static final int action_latlong=0x7f07002b;
         public static final int action_location=0x7f07002d;
-        public static final int action_mark_location=0x7f070051;
+        public static final int action_mark_location=0x7f070053;
         public static final int action_move=0x7f07002a;
-        public static final int action_position_track=0x7f07004e;
-        public static final int action_position_track_open=0x7f070052;
-        public static final int action_position_track_save=0x7f070053;
-        public static final int action_position_track_start=0x7f07004f;
-        public static final int action_position_track_stop=0x7f070050;
+        public static final int action_position_track=0x7f070050;
+        public static final int action_position_track_open=0x7f070054;
+        public static final int action_position_track_save=0x7f070055;
+        public static final int action_position_track_start=0x7f070051;
+        public static final int action_position_track_stop=0x7f070052;
         public static final int action_settings=0x7f070029;
         public static final int action_thislocation=0x7f07002e;
         public static final int action_time_track=0x7f070049;
+        public static final int action_time_track_create=0x7f07004e;
+        public static final int action_time_track_drop=0x7f07004f;
         public static final int action_time_track_open=0x7f07004c;
         public static final int action_time_track_save=0x7f07004d;
         public static final int action_time_track_start=0x7f07004a;
@@ -1822,14 +1826,14 @@ containing a value of this type.
         /**  Long form sign-in button text [CHAR LIMIT=30] 
          */
         public static final int common_signin_button_text_long=0x7f070018;
-        public static final int file_name=0x7f070057;
+        public static final int file_name=0x7f070059;
         public static final int hello_world=0x7f070028;
         public static final int latitude=0x7f07002f;
         public static final int longitude=0x7f070030;
-        public static final int open_file=0x7f070054;
+        public static final int open_file=0x7f070056;
         public static final int radTrafficOff=0x7f070046;
         public static final int radTrafficOn=0x7f070045;
-        public static final int save_file=0x7f070055;
+        public static final int save_file=0x7f070057;
         public static final int strAbout1=0x7f07003b;
         public static final int strChangeSettings=0x7f070047;
         public static final int strDefaultSettings=0x7f070048;
@@ -1837,7 +1841,7 @@ containing a value of this type.
         public static final int strHelp2=0x7f07003f;
         public static final int strHelp3=0x7f070040;
         public static final int strHelp4=0x7f070041;
-        public static final int strHelp5=0x7f070058;
+        public static final int strHelp5=0x7f07005a;
         public static final int strSetZoom=0x7f070042;
         public static final int strSettingsHelp=0x7f070044;
         public static final int strZoomDefault=0x7f070043;
@@ -1846,7 +1850,7 @@ containing a value of this type.
         public static final int title_activity_help=0x7f07003c;
         public static final int title_activity_settings=0x7f070038;
         public static final int title_activity_splash=0x7f070036;
-        public static final int title_activity_track=0x7f070056;
+        public static final int title_activity_track=0x7f070058;
         /**  Text on a placeholder buy button when Google Play services is not
          available or up-to-date 
          */
