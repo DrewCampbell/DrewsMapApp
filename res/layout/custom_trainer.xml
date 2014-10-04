@@ -1,0 +1,45 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/RelativeLayout1"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
+    
+        <ListView
+        android:id="@+id/listviewimages"
+        android:layout_width="200dp"
+        android:layout_height="300dp"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/btnTrainer"
+        android:layout_marginTop="24dp"
+        android:visibility="visible" >
+    </ListView>
+    
+    <Button
+        android:id="@+id/btnTrainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/listviewimages"
+        android:text="@string/train" />
+
+    <Button
+        android:id="@+id/btnCancelTemplate"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/btnSaveTemplate"
+        android:layout_alignBottom="@+id/btnSaveTemplate"
+        android:layout_marginLeft="20dp"
+        android:layout_toRightOf="@+id/btnSaveTemplate"
+        android:text="@string/btnCancel" />
+
+    <Button
+        android:id="@+id/btnSaveTemplate"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/listviewimages"
+        android:layout_marginTop="47dp"
+        android:text="@string/save_template" />
+
+
+
+</RelativeLayout>

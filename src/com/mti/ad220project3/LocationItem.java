@@ -7,16 +7,17 @@ public class LocationItem {
 	long seconds;
 	double altitude;
 	String image;
+	String timeStamp;
 	
-	
-	public LocationItem(double latitude, double longitude, long seconds, double altitude, String image) {
+	public LocationItem(double latitude, double longitude, long seconds, double altitude, String image, String timeStamp) {
 	
 		this.latitude = latitude;
 		this.longitude = longitude;
 		this.seconds = seconds;
 		this.altitude = altitude;
 		this.image = image;
-	
+		this.timeStamp = timeStamp;
+		
 	}
 	
 		
@@ -40,7 +41,10 @@ public class LocationItem {
 	public void setImage(String image) {
 		this.image = image;
 	}
-	
+
+	public void setTimeStamp(String timeStamp) {
+		this.timeStamp = timeStamp;
+	}
 	
 	public double getLatitude() {
 		return latitude;
@@ -60,6 +64,10 @@ public class LocationItem {
 	
 	public String getImage() {
 		return image;
+	}
+
+	public String getTimeStamp() {
+		return timeStamp;
 	}
 	
 }

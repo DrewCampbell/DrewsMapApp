@@ -1,13 +1,14 @@
 package com.mti.ad220project3;
 
-import com.google.android.gms.internal.db;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.widget.Toast;
 
@@ -15,6 +16,7 @@ public class DatabaseConnector {
 	
 	//  database name
 	private static final String DATABASE_NAME = "locationinformation";
+	private String tableName;
 	private static final int DATABASE_VERSION = 1;
 	private SQLiteDatabase database;  // database object
 	private DatabaseOpenHelper databaseOpenHelper;  //  database helper
@@ -41,7 +43,7 @@ public class DatabaseConnector {
 			super(context, DATABASE_NAME, null, DATABASE_VERSION);
 
 			//  Gets here
-			//Toast.makeText(ctx, "Helper Constructor", Toast.LENGTH_LONG).show();			
+			Toast.makeText(ctx, "Helper Constructor", Toast.LENGTH_LONG).show();			
 		}
 
 		// creates table when the database is created
@@ -57,7 +59,7 @@ public class DatabaseConnector {
 			String createQuery = "CREATE TABLE testlocations" +
 			"(_locid integer primary key autoincrement," +
 			"latitude double, longitude double, seconds long, " +
-			"altitude integer, image string);";
+			"altitude integer, image string, timestamp string);";
 			
 			try {
 				db.execSQL(createQuery);  //execute the query
@@ -93,12 +95,16 @@ public class DatabaseConnector {
 			database.close();  // close the database connection
 	}  // end method close
 
-	
+	public void setTableName(String tableName) {
+		this.tableName = tableName;
+	}
 
 	
 
 	//  inserts a new contact in the database
-	public long insertData(double latitude, double longitude, long seconds, double altitude, String image) {
+	public long insertData(String tableName, double latitude, double longitude, long seconds, double altitude, String image, String timeStamp) {
+		
+		createTable(tableName);
 		
 		ContentValues newPointInfo = new ContentValues();
 		newPointInfo.put("latitude", latitude);
@@ -107,42 +113,68 @@ public class DatabaseConnector {
 		newPointInfo.put("altitude", altitude);
 		newPointInfo.put("image", image);
 		
-		return database.insertOrThrow("testlocations", null, newPointInfo);
+		return database.insertOrThrow(tableName, null, newPointInfo);
 	}  // end method insertContact	
 
 	
-	public Cursor returnData() {
-		return database.query("testlocations", new String[] {"_locid", "latitude", "longitude", "seconds", "altitude", "image"}, null, null, null, null, null);
+	public Cursor returnData(String tableName) {
+		return database.query(tableName, new String[] {"_locid", "latitude", "longitude", "seconds", "altitude", "image", "timestamp"}, null, null, null, null, null);
 	}
 	
-	public void clearData() {
+	public void clearData(String tableName) {
 		//database.execSQL("delete * from testlocations");
-		database.delete("testlocations", null, null);
+		database.delete(tableName, null, null);
 	
 	}
 	
-	public void createTable() {
+	public void createTable(String tableToCreate) {
 
 		
-		String createQuery = "CREATE TABLE testlocations2" +
+		String createQuery = "CREATE TABLE " + tableToCreate +
 		"(_locid integer primary key autoincrement," +
 		"latitude double, longitude double, seconds long, " +
-		"altitude integer, image string);";
+		"altitude integer, image string, timestamp string);";
 		
 		try {
 			database.execSQL(createQuery);  //execute the query
 		} catch(SQLException e) {
 			e.printStackTrace();
 			Toast.makeText(ctx, "Errored connecting to database", Toast.LENGTH_LONG).show();
+			Toast.makeText(ctx, "Error creating table", Toast.LENGTH_LONG).show();
 		}
 		
 	}
 	
 
-	public void dropTable() {
+	public void dropTable(String tableName) {
 
 		
-		String createQuery = "DROP TABLE testlocations2";
+		String createQuery = "DROP TABLE " + tableName;
+		
+		try {
+			database.execSQL(createQuery);  //execute the query
+		} catch(SQLException e) {
+			e.printStackTrace();
+			Toast.makeText(ctx, "Errored connecting to database", Toast.LENGTH_LONG).show();
+			Toast.makeText(ctx, "Error dropping table", Toast.LENGTH_LONG).show();
+		}
+	}
+
+	
+	public void copyTable() {
+
+
+
+
+		Calendar c1 = Calendar.getInstance();      
+		String myfrmt = String.valueOf(c1.get(Calendar.YEAR)) + c1.get(Calendar.MONTH) + c1.get(Calendar.DAY_OF_MONTH) + c1.get(Calendar.HOUR_OF_DAY) + c1.get(Calendar.MINUTE);
+
+
+		
+		Toast.makeText(ctx, myfrmt, Toast.LENGTH_LONG).show();
+		
+		//String createQuery = "CREATE TABLE timetracking2" + myfrmt + " AS SELECT * FROM testlocations";
+		String createQuery = "CREATE TABLE timetracking20141004 AS SELECT * FROM testlocations";		
 		
 		try {
 			database.execSQL(createQuery);  //execute the query
