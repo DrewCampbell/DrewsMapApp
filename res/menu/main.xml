@@ -73,6 +73,20 @@
 				android:visible="false"
         		app:showAsAction="never">
 		    </item>			    
+		    <item
+		    	android:id="@+id/action_position_track_open_template"
+        		android:orderInCategory="100"
+        		android:title="@string/action_position_track_open_template"
+				android:visible="true"
+        		app:showAsAction="never">
+		    </item>		
+		    <item
+		    	android:id="@+id/action_position_track_new_template"
+        		android:orderInCategory="100"
+        		android:title="@string/action_position_track_new_template"
+				android:visible="true"
+        		app:showAsAction="never">
+		    </item>				    
 		</menu>
 	    
 	</item>

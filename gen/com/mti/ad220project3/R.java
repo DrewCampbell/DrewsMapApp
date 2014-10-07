@@ -1466,7 +1466,7 @@ containing a value of this type.
     }
     public static final class id {
         public static final int RelativeLayout1=0x7f080060;
-        public static final int action_about=0x7f080083;
+        public static final int action_about=0x7f080085;
         public static final int action_address=0x7f080076;
         public static final int action_bar=0x7f08002e;
         public static final int action_bar_activity_content=0x7f080027;
@@ -1476,7 +1476,7 @@ containing a value of this type.
         public static final int action_bar_subtitle=0x7f080035;
         public static final int action_bar_title=0x7f080034;
         public static final int action_context_bar=0x7f08002f;
-        public static final int action_help=0x7f080084;
+        public static final int action_help=0x7f080086;
         public static final int action_latlong=0x7f080075;
         public static final int action_mark_location=0x7f08007b;
         public static final int action_menu_divider=0x7f080028;
@@ -1484,17 +1484,19 @@ containing a value of this type.
         public static final int action_mode_close_button=0x7f080036;
         public static final int action_move=0x7f080074;
         public static final int action_position_track=0x7f080078;
+        public static final int action_position_track_new_template=0x7f08007f;
         public static final int action_position_track_open=0x7f08007c;
+        public static final int action_position_track_open_template=0x7f08007e;
         public static final int action_position_track_save=0x7f08007d;
         public static final int action_position_track_start=0x7f080079;
         public static final int action_position_track_stop=0x7f08007a;
         public static final int action_settings=0x7f080073;
         public static final int action_thislocation=0x7f080077;
-        public static final int action_time_track=0x7f08007e;
-        public static final int action_time_track_open=0x7f080081;
-        public static final int action_time_track_save=0x7f080082;
-        public static final int action_time_track_start=0x7f08007f;
-        public static final int action_time_track_stop=0x7f080080;
+        public static final int action_time_track=0x7f080080;
+        public static final int action_time_track_open=0x7f080083;
+        public static final int action_time_track_save=0x7f080084;
+        public static final int action_time_track_start=0x7f080081;
+        public static final int action_time_track_stop=0x7f080082;
         public static final int activity_chooser_view_content=0x7f080037;
         public static final int always=0x7f08001e;
         public static final int beginning=0x7f080023;
@@ -1722,7 +1724,9 @@ containing a value of this type.
         public static final int action_mark_location=0x7f070055;
         public static final int action_move=0x7f07002a;
         public static final int action_position_track=0x7f070052;
+        public static final int action_position_track_new_template=0x7f070060;
         public static final int action_position_track_open=0x7f070056;
+        public static final int action_position_track_open_template=0x7f07005f;
         public static final int action_position_track_save=0x7f070057;
         public static final int action_position_track_start=0x7f070053;
         public static final int action_position_track_stop=0x7f070054;

@@ -7,6 +7,8 @@ package com.mti.ad220project3;
 
 
 
+import java.io.File;
+import java.io.InputStream;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -26,6 +28,7 @@ import android.location.LocationManager;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.PowerManager;
 import android.preference.PreferenceManager;
@@ -41,9 +44,8 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -617,7 +619,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 					
 				}
 
-		    });  
+		    });
 			
 			
 			
@@ -897,7 +899,95 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 			
 			break;
 			
+		case R.id.action_position_track_open_template:
+			break;			
+
+		case R.id.action_position_track_new_template:
+		    final Dialog dialogNewTemplate = new Dialog(this);
+		    dialogNewTemplate.setContentView(R.layout.custom_trainer);
 			
+		    
+		    final ListView listViewImages = (ListView) dialogNewTemplate.findViewById(R.id.listviewimages);
+		    
+		    
+		    //  Set the ListView to list the files
+		    ArrayAdapter adapterImages = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
+		    adapterImages.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);		    
+		    listViewImages.setAdapter(adapterImages);		    
+		    
+		    final List<String> imageList;
+		    ImageView image;
+		    
+	        InputStream in = getClass().getResourceAsStream("/DCIM/Camera/icons/grapes.png");
+	        
+    	    Toast.makeText(getBaseContext(), "New Template Clicked", Toast.LENGTH_SHORT).show(); 
+    	  		    
+    	    //  Here we will show all the files in a certain folder			    
+		  
+    	    ArrayList<String> f = new ArrayList<String>();// list of file paths
+    	    File[] listFile;
+    	    
+    	    //File file= new File(android.os.Environment.getExternalStorageDirectory(),"TMyFolder");
+    	    File file = new File("/DCIM/Camera/icons");
+
+    	    String root;
+    	    
+    	    //root = Environment.getExternalStorageDirectory().getPath();
+    	    //root = Environment.getExternalStorageDirectory().getAbsolutePath();
+    	    
+    	    root = Environment.getRootDirectory().getPath();
+    	    
+    	    //Toast.makeText(getBaseContext(), root, Toast.LENGTH_SHORT).show(); 
+    	    
+    	     File file2 = new File(root + "/media");
+    	     File[] files = file2.listFiles();
+            
+            if (file2.isDirectory())
+            {
+ 
+        	    Toast.makeText(getBaseContext(), "It's a directory", Toast.LENGTH_SHORT).show();             	
+
+        	    listFile = file2.listFiles();
+
+
+                for (int itest = 0; itest < listFile.length; itest++)
+                {
+
+                    f.add(listFile[itest].getAbsolutePath());
+            	    Toast.makeText(getBaseContext(), listFile[itest].toString(), Toast.LENGTH_SHORT).show(); 
+                }
+            } else {
+        	    Toast.makeText(getBaseContext(), "It's not a directory", Toast.LENGTH_SHORT).show();            	
+            }
+    	    
+		    	
+    	    //  adapterImages.add(image);
+    	   
+            //  image.set
+		    
+		    
+		    
+		    final Button btnCancelPositionTrackOpen = (Button) dialogNewTemplate.findViewById(R.id.btnCancelTemplate);
+			
+			btnCancelPositionTrackOpen.setOnClickListener(new View.OnClickListener() {
+			
+                @Override
+                public void onClick(View v) {			
+
+		    	    Toast.makeText(getBaseContext(), "Cancel Clicked", Toast.LENGTH_SHORT).show();    	    
+
+        			dialogNewTemplate.dismiss();			
+			
+                }
+            });			
+		    
+		    
+		    
+		    
+		    dialogNewTemplate.show();
+		    
+			
+			break;	
 			
 			
 		case R.id.action_time_track_start:	
