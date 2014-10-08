@@ -19,6 +19,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
@@ -913,10 +915,11 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 		    //  Set the ListView to list the files
 		    ArrayAdapter adapterImages = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
 		    adapterImages.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);		    
-		    listViewImages.setAdapter(adapterImages);		    
+	    
 		    
 		    final List<String> imageList;
 		    ImageView image;
+		    
 		    
 	        InputStream in = getClass().getResourceAsStream("/DCIM/Camera/icons/grapes.png");
 	        
@@ -933,15 +936,23 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
     	    String root;
     	    
     	    //root = Environment.getExternalStorageDirectory().getPath();
-    	    //root = Environment.getExternalStorageDirectory().getAbsolutePath();
+    	    root = Environment.getExternalStorageDirectory().getAbsolutePath();
     	    
-    	    root = Environment.getRootDirectory().getPath();
+    	    //root = Environment.getRootDirectory().getPath();
     	    
-    	    //Toast.makeText(getBaseContext(), root, Toast.LENGTH_SHORT).show(); 
+    	    Toast.makeText(getBaseContext(), root, Toast.LENGTH_SHORT).show(); 
+
     	    
-    	     File file2 = new File(root + "/media");
-    	     File[] files = file2.listFiles();
-            
+    	    BitmapFactory.Options options = new BitmapFactory.Options();
+    	    options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+
+    	    
+    	    
+    	    
+    	     File file2 = new File(root + "/Pictures/icons");
+
+ 	         	     
+          
             if (file2.isDirectory())
             {
  
@@ -952,7 +963,11 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 
                 for (int itest = 0; itest < listFile.length; itest++)
                 {
-
+            	    Bitmap bitmap = BitmapFactory.decodeFile(listFile[itest].getAbsolutePath(), options);
+            	    //selected_photo.setImageBitmap(bitmap);
+            	    
+            	    adapterImages.add(bitmap);
+            	    
                     f.add(listFile[itest].getAbsolutePath());
             	    Toast.makeText(getBaseContext(), listFile[itest].toString(), Toast.LENGTH_SHORT).show(); 
                 }
@@ -960,7 +975,8 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
         	    Toast.makeText(getBaseContext(), "It's not a directory", Toast.LENGTH_SHORT).show();            	
             }
     	    
-		    	
+		    listViewImages.setAdapter(adapterImages);	
+		    
     	    //  adapterImages.add(image);
     	   
             //  image.set
