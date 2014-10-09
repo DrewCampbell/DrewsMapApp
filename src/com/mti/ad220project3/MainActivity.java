@@ -907,79 +907,56 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 		case R.id.action_position_track_new_template:
 		    final Dialog dialogNewTemplate = new Dialog(this);
 		    dialogNewTemplate.setContentView(R.layout.custom_trainer);
-			
-		    
+					    
 		    final ListView listViewImages = (ListView) dialogNewTemplate.findViewById(R.id.listviewimages);
-		    
-		    
+		    		    
 		    //  Set the ListView to list the files
 		    ArrayAdapter adapterImages = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
 		    adapterImages.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);		    
-	    
-		    
-		    final List<String> imageList;
-		    ImageView image;
-		    
-		    
-	        InputStream in = getClass().getResourceAsStream("/DCIM/Camera/icons/grapes.png");
-	        
+	    		    
+		    		            
     	    Toast.makeText(getBaseContext(), "New Template Clicked", Toast.LENGTH_SHORT).show(); 
     	  		    
     	    //  Here we will show all the files in a certain folder			    
 		  
-    	    ArrayList<String> f = new ArrayList<String>();// list of file paths
-    	    File[] listFile;
-    	    
-    	    //File file= new File(android.os.Environment.getExternalStorageDirectory(),"TMyFolder");
-    	    File file = new File("/DCIM/Camera/icons");
+       	    File[] listFiles;
 
     	    String root;
     	    
-    	    //root = Environment.getExternalStorageDirectory().getPath();
     	    root = Environment.getExternalStorageDirectory().getAbsolutePath();
     	    
-    	    //root = Environment.getRootDirectory().getPath();
-    	    
-    	    Toast.makeText(getBaseContext(), root, Toast.LENGTH_SHORT).show(); 
 
-    	    
     	    BitmapFactory.Options options = new BitmapFactory.Options();
     	    options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-
     	    
-    	    
-    	    
-    	     File file2 = new File(root + "/Pictures/icons");
+    	     File pictureDirectory = new File(root + "/Pictures/icons");
 
  	         	     
-          
-            if (file2.isDirectory())
+            if (pictureDirectory.isDirectory())
             {
  
         	    Toast.makeText(getBaseContext(), "It's a directory", Toast.LENGTH_SHORT).show();             	
 
-        	    listFile = file2.listFiles();
+        	    listFiles = pictureDirectory.listFiles();
 
 
-                for (int itest = 0; itest < listFile.length; itest++)
+                for (int picturePointer = 0; picturePointer < listFiles.length; picturePointer++)
                 {
-            	    Bitmap bitmap = BitmapFactory.decodeFile(listFile[itest].getAbsolutePath(), options);
+            	    Bitmap bitmap = BitmapFactory.decodeFile(listFiles[picturePointer].getAbsolutePath(), options);
             	    //selected_photo.setImageBitmap(bitmap);
+            	    //ImageView imageView = (ImageView) BitmapFactory.decodeFile(listFiles[picturePointer].getAbsolutePath(), options);
             	    
-            	    adapterImages.add(bitmap);
+            	    // This worked for String
+            	    adapterImages.add(bitmap);                    
             	    
-                    f.add(listFile[itest].getAbsolutePath());
-            	    Toast.makeText(getBaseContext(), listFile[itest].toString(), Toast.LENGTH_SHORT).show(); 
+            	    
+            	    Toast.makeText(getBaseContext(), listFiles[picturePointer].toString(), Toast.LENGTH_SHORT).show(); 
                 }
             } else {
         	    Toast.makeText(getBaseContext(), "It's not a directory", Toast.LENGTH_SHORT).show();            	
             }
     	    
 		    listViewImages.setAdapter(adapterImages);	
-		    
-    	    //  adapterImages.add(image);
-    	   
-            //  image.set
 		    
 		    
 		    
