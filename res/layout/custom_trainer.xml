@@ -5,7 +5,7 @@
     android:orientation="vertical" >
 
     
-        <ListView
+    <ListView
         android:id="@+id/listviewimages"
         android:layout_width="300dp"
         android:layout_height="300dp"
@@ -40,6 +40,14 @@
         android:layout_marginTop="47dp"
         android:text="@string/save_template" />
 
-
+    <ImageView
+        android:id="@+id/imageViewPicture"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="18dp"
+        android:src="@drawable/abc_ab_bottom_solid_dark_holo" />
 
 </RelativeLayout>

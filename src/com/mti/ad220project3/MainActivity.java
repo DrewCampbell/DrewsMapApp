@@ -108,6 +108,14 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 	  private static final int RECORDER_SAMPLERATE = 8000;
 	  private static final int RECORDER_CHANNELS = AudioFormat.CHANNEL_IN_MONO;
 	  private static final int RECORDER_AUDIO_ENCODING = AudioFormat.ENCODING_PCM_16BIT;
+
+	  //  This will hold a String value of the utterance
+	  private String utterance;
+	  //  This will hold the image associated with the utterance
+	  private String associatedImage;
+	  //  ArrayList of ObjectAssociation objects
+	  private ArrayList<ObjectAssociation> associations;
+	  
 	  
 	  //  This will store locations
 	  ArrayList<LocationItem> locations = new ArrayList<LocationItem>();
@@ -132,6 +140,9 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);        
 
+        
+  	    associations = new ArrayList<ObjectAssociation>();
+  	    
         keepTracking = false;
         
 		sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -902,14 +913,15 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 			break;
 			
 		case R.id.action_position_track_open_template:
-			break;			
+			break;
 
 		case R.id.action_position_track_new_template:
 		    final Dialog dialogNewTemplate = new Dialog(this);
 		    dialogNewTemplate.setContentView(R.layout.custom_trainer);
 					    
 		    final ListView listViewImages = (ListView) dialogNewTemplate.findViewById(R.id.listviewimages);
-		    		    
+		    final ImageView imageViewPicture = (ImageView) dialogNewTemplate.findViewById(R.id.imageViewPicture);
+		    
 		    //  Set the ListView to list the files
 		    ArrayAdapter adapterImages = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
 		    adapterImages.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);		    
@@ -919,9 +931,9 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
     	  		    
     	    //  Here we will show all the files in a certain folder			    
 		  
-       	    File[] listFiles;
+       	    final File[] listFiles;
 
-    	    String root;
+    	    final String root;
     	    
     	    root = Environment.getExternalStorageDirectory().getAbsolutePath();
     	    
@@ -929,7 +941,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
     	    BitmapFactory.Options options = new BitmapFactory.Options();
     	    options.inPreferredConfig = Bitmap.Config.ARGB_8888;
     	    
-    	     File pictureDirectory = new File(root + "/Pictures/icons");
+    	    File pictureDirectory = new File(root + "/Pictures/icons");
 
  	         	     
             if (pictureDirectory.isDirectory())
@@ -939,27 +951,117 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 
         	    listFiles = pictureDirectory.listFiles();
 
-
+        	    associatedImage = listFiles[0].getAbsolutePath();
                 for (int picturePointer = 0; picturePointer < listFiles.length; picturePointer++)
-                {
-            	    Bitmap bitmap = BitmapFactory.decodeFile(listFiles[picturePointer].getAbsolutePath(), options);
-            	    //selected_photo.setImageBitmap(bitmap);
-            	    //ImageView imageView = (ImageView) BitmapFactory.decodeFile(listFiles[picturePointer].getAbsolutePath(), options);
-            	    
-            	    // This worked for String
-            	    adapterImages.add(bitmap);                    
-            	    
-            	    
-            	    Toast.makeText(getBaseContext(), listFiles[picturePointer].toString(), Toast.LENGTH_SHORT).show(); 
+                {            	    
+
+            	    adapterImages.add(listFiles[picturePointer].getName());
+                	   
+            	    //Toast.makeText(getBaseContext(), listFiles[picturePointer].toString(), Toast.LENGTH_SHORT).show(); 
+                }  // end for
+            	
+                if(listFiles.length!=0) {
+                	Bitmap bitmap = BitmapFactory.decodeFile(listFiles[0].getAbsolutePath(), options);		    
+                	imageViewPicture.setImageBitmap(bitmap);   
                 }
             } else {
-        	    Toast.makeText(getBaseContext(), "It's not a directory", Toast.LENGTH_SHORT).show();            	
+        	    Toast.makeText(getBaseContext(), "Not currently a directory.  Making directory.", Toast.LENGTH_SHORT).show();
+
+        	    pictureDirectory.mkdirs();
+            
             }
     	    
 		    listViewImages.setAdapter(adapterImages);	
 		    
+
+		    listViewImages.setClickable(true);
+		    listViewImages.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+		        @Override
+		        public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
+
+		        	
+		        	//  on click we want to change what this associated Image is going to be
+		        	
+		    	    BitmapFactory.Options options = new BitmapFactory.Options();
+		    	    options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+		        	
+		        	File pictureDirectory = new File(root + "/Pictures/icons");
+	        	    File[] listFiles2 = pictureDirectory.listFiles();		        	
+		        	
+	        	    //  This would get the entire path
+	        	    associatedImage = listFiles2[position].getAbsolutePath();
+	        	    //  Let's try to return just the file name.  This seems to be null.
+	        	    associatedImage = listFiles2[position].getName();
+	        	    		
+	        	    
+	        	    Bitmap bitmap = BitmapFactory.decodeFile(listFiles2[position].getAbsolutePath(), options);
+                	imageViewPicture.setImageBitmap(bitmap); 
+		        	
+		            //Toast.makeText(getApplicationContext(),"Clicked!",Toast.LENGTH_SHORT).show();
+		        }
+		    });
+		    
+		    //  trainer button associates image to voice input utterances
+		    final Button btnTrainer = (Button) dialogNewTemplate.findViewById(R.id.btnTrainer);		    
+		    
+			btnTrainer.setOnClickListener(new View.OnClickListener() {
+				
+                @Override
+                public void onClick(View v) {			
+
+		    	    Toast.makeText(getBaseContext(), "Trainer Clicked", Toast.LENGTH_SHORT).show();    	     
+		    	    
+		    	    
+		    	    //  Here is where we want to train the voice recognition
+
+					Intent i = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+					i.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);	
+					try {
+						startActivityForResult(i, REQUEST_OK);
+					} catch(Exception e) {
+						//Toast.makeText(this, "Error initializing speech to text engine", Toast.LENGTH_LONG).show();
+					}
+				
+					ArrayList<String> info;
+					info = i.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+		    	    
+		    	    //Toast.makeText(getBaseContext(), "What is this variable 'info'" , Toast.LENGTH_SHORT).show(); 		    	    		    	    
+		    	    //Toast.makeText(getBaseContext(), info.get(0), Toast.LENGTH_SHORT).show();
+		    	    // Testing it here
+		    	    //Toast.makeText(getBaseContext(), "Length here is " + info.size(), Toast.LENGTH_SHORT).show();
+		    	    //Toast.makeText(getBaseContext(), "Utterance is " + utterance, Toast.LENGTH_SHORT).show();			    	    
+		    	    
+                }
+            });				    
 		    
 		    
+		    final Button btnSaveTemplate = (Button) dialogNewTemplate.findViewById(R.id.btnSaveTemplate);
+		    
+			btnSaveTemplate.setOnClickListener(new View.OnClickListener() {
+				
+                @Override
+                public void onClick(View v) {			
+
+		    	    Toast.makeText(getBaseContext(), "Save Template Clicked", Toast.LENGTH_SHORT).show();    
+		    	    
+
+		    	    Toast.makeText(getBaseContext(), "Number Of Objects " + associations.size() , Toast.LENGTH_SHORT).show();    	
+		    	    
+		    		for(ObjectAssociation association : associations){
+
+			    	    Toast.makeText(getBaseContext(), association.getName(), Toast.LENGTH_SHORT).show();  
+			    	    
+		    		}
+		    	    
+		    	    
+		    	    
+		    	    dialogNewTemplate.dismiss();			
+			
+                }
+            });				
+			
+			
 		    final Button btnCancelPositionTrackOpen = (Button) dialogNewTemplate.findViewById(R.id.btnCancelTemplate);
 			
 			btnCancelPositionTrackOpen.setOnClickListener(new View.OnClickListener() {
@@ -1507,11 +1609,14 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 	        super.onActivityResult(requestCode, resultCode, data);
 	        if (requestCode==REQUEST_OK  && resultCode==RESULT_OK) {
 	        		ArrayList<String> thingsYouSaid = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-
+	        		utterance = thingsYouSaid.get(0);
 	        		
-	    			Toast.makeText(this, thingsYouSaid.get(0), Toast.LENGTH_LONG).show();	
-	    			Toast.makeText(this, "Length = " + thingsYouSaid.size(), Toast.LENGTH_LONG).show();
-	    			
+	    			//Toast.makeText(this, thingsYouSaid.get(0), Toast.LENGTH_LONG).show();	
+	    			//Toast.makeText(this, "Length = " + thingsYouSaid.size(), Toast.LENGTH_LONG).show();
+	    			Toast.makeText(this, associatedImage + " - " + utterance, Toast.LENGTH_LONG).show();	
+	     
+		    	    addAssociation(associatedImage, utterance);
+		    	    
 	    			LatLng newLatLng = new LatLng(pLat, pLong);
 
 	    			
@@ -1547,7 +1652,49 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 	    }
 	
 	
+	public void addAssociation(String associatedImage, String utterance) {
+		
+		boolean associatedImageFound = false;
+		boolean utteranceFound = false;
+
+		
+		for(ObjectAssociation association : associations){
+			
+			if (association.getName().equals(associatedImage)) {
+				associatedImageFound = true;
+			    Toast.makeText(getBaseContext(), "Image was found", Toast.LENGTH_SHORT).show();	
+				
+				if(association.checkForAssociations(utterance)==true) {
+				    Toast.makeText(getBaseContext(), "Utterance was found", Toast.LENGTH_SHORT).show();	
+					utteranceFound = true;
+				}
+				
+			}
+			if (utteranceFound==false) {
+			    Toast.makeText(getBaseContext(), "Utterance wasn't found for image", Toast.LENGTH_SHORT).show();					
+				
+			    //  no utterance found.  Add to utterances
+				association.addUtterance(utterance);
+			}
+			
+		}
+		
+		
+		//  this image has not been associated with anything yet
+		if(associatedImageFound==false) {
+
+		    Toast.makeText(getBaseContext(), "Image wasn't found", Toast.LENGTH_SHORT).show();		
+			
+			ObjectAssociation myAssociation = new ObjectAssociation(associatedImage);
+			myAssociation.addUtterance(utterance);
+			
+			associations.add(myAssociation);
+			
+		}
+
+	    Toast.makeText(getBaseContext(), "Size is " + associations.size(), Toast.LENGTH_SHORT).show();		
 	
+	}
 	
 	
 	
