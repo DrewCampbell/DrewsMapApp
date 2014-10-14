@@ -8,12 +8,12 @@ package com.mti.ad220project3;
 
 
 import java.io.File;
-import java.io.InputStream;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -113,6 +113,8 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 	  private String utterance;
 	  //  This will hold the image associated with the utterance
 	  private String associatedImage;
+	  //  Will have the current selected file
+	  private String associatedFile;
 	  //  ArrayList of ObjectAssociation objects
 	  private ArrayList<ObjectAssociation> associations;
 	  
@@ -913,6 +915,13 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 			break;
 			
 		case R.id.action_position_track_open_template:
+
+		    final Dialog templateOpen = new Dialog(this);			    
+		    templateOpen.setContentView(R.layout.open_template);			
+			
+
+		    templateOpen.show();
+		    
 			break;
 
 		case R.id.action_position_track_new_template:
@@ -974,6 +983,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 		    listViewImages.setAdapter(adapterImages);	
 		    
 
+		    //  set up listview to list files
 		    listViewImages.setClickable(true);
 		    listViewImages.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -1036,16 +1046,178 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
             });				    
 		    
 		    
-		    final Button btnSaveTemplate = (Button) dialogNewTemplate.findViewById(R.id.btnSaveTemplate);
+			// button to save utterances to a file  
+			final Button btnSaveTemplate = (Button) dialogNewTemplate.findViewById(R.id.btnSaveTemplate);
 		    
 			btnSaveTemplate.setOnClickListener(new View.OnClickListener() {
 				
                 @Override
                 public void onClick(View v) {			
 
-		    	    Toast.makeText(getBaseContext(), "Save Template Clicked", Toast.LENGTH_SHORT).show();    
+		    	    Toast.makeText(getBaseContext(), "Confirm FileName to Save to", Toast.LENGTH_SHORT).show();    
+		    	    
+// ******************************************************************************************************************
+		    	    //  This is the inner dialog box.  Open this new dialog box
+		    	    //  This is the confirmation template activity
+	
+		    	    final Dialog confirmSaveTemplate = new Dialog(MainActivity.this);
+				      
+				    confirmSaveTemplate.setContentView(R.layout.save_template);			
+
+				    
+				    // First populate the listview with the file names
+
+				    //  Cutting and pasting code - start
+				    
+				    final ListView listViewFiles = (ListView) confirmSaveTemplate.findViewById(R.id.listviewfiles);
+				    
+				    //  Set the ListView to list the files
+				    ArrayAdapter adapterFiles = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_spinner_item);
+				    adapterFiles.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);		    
+			    		    
+				    		             
+		    	  		    
+		    	    //  Here we will show all the files in the templates folder			    
+				  
+		       	    final File[] listFiles;
+
+		    	    final String root;
+		    	    
+		    	    root = Environment.getExternalStorageDirectory().getAbsolutePath();
 		    	    
 
+		    	    BitmapFactory.Options options = new BitmapFactory.Options();
+		    	    options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+		    	    
+		    	    File fileDirectory = new File(root + "/Android/data/templates");
+
+		    	    
+		    	   
+		 	         	     
+		            if (fileDirectory.isDirectory())
+		            {
+		            	
+		        	    Toast.makeText(getBaseContext(), "It's a directory", Toast.LENGTH_SHORT).show();             	
+		        	    
+		        	    listFiles = fileDirectory.listFiles();
+		        	    
+		        	    
+		                for (int filePointer = 0; filePointer < listFiles.length; filePointer++)
+		                {            	    
+
+		            	    adapterFiles.add(listFiles[filePointer].getName());
+		                	   
+		            	    //Toast.makeText(getBaseContext(), listFiles[picturePointer].toString(), Toast.LENGTH_SHORT).show(); 
+		                }  // end for
+		            	
+
+		            } 
+		            
+		            else {
+		        	    Toast.makeText(getBaseContext(), "Not currently a directory.  Making directory.", Toast.LENGTH_SHORT).show();
+
+		        	    fileDirectory.mkdirs();
+		            
+		            }
+		    	    
+				    listViewFiles.setAdapter(adapterFiles);	
+				    
+
+				    //  set up listview to list files  files should be clickable
+				    listViewImages.setClickable(true);
+				    listViewImages.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+				        @Override
+				        public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
+
+				        	//  onclick, get the associated file
+				        	
+				        	File pictureDirectory = new File(root + "/Android/data/templates");
+			        	    File[] listFiles2 = pictureDirectory.listFiles();		        	
+				        	
+			        	    //  This would get the entire path
+			        	    associatedFile = listFiles2[position].getAbsolutePath();
+			        	    //  Let's try to return just the file name.  This seems to be null.
+			        	    associatedFile = listFiles2[position].getName();
+			        	    	
+				        	
+				            //Toast.makeText(getApplicationContext(),"Clicked!",Toast.LENGTH_SHORT).show();
+				        }
+				    });
+				    
+				    
+				    //  End of cut and pasted code
+				    final EditText textViewFiles = (EditText) confirmSaveTemplate.findViewById(R.id.txtFileName);
+				    
+				    Calendar c1 = Calendar.getInstance();      
+				    String dateStamp = String.valueOf(c1.get(Calendar.YEAR)) + c1.get(Calendar.MONTH) + c1.get(Calendar.DAY_OF_MONTH) + c1.get(Calendar.HOUR_OF_DAY) + c1.get(Calendar.MINUTE);
+				    //  Set the default name of the template file				    
+				    textViewFiles.setText("template" + dateStamp);
+				    
+				    
+				    
+				   
+				    // This will be for cancel button
+				    final Button btnCancelTemplate = (Button) confirmSaveTemplate.findViewById(R.id.btnCancelTemplate);
+					
+					btnCancelTemplate.setOnClickListener(new View.OnClickListener() {
+					
+		                @Override
+		                public void onClick(View v) {			
+
+				    	    Toast.makeText(getBaseContext(), "Cancel Clicked", Toast.LENGTH_SHORT).show();    	    
+
+		        			confirmSaveTemplate.dismiss();			
+					
+		                }
+		            });	
+
+				    final Button btnSaveTemplate = (Button) confirmSaveTemplate.findViewById(R.id.btnSaveTemplate);
+					
+					btnSaveTemplate.setOnClickListener(new View.OnClickListener() {
+					
+		                @Override
+		                public void onClick(View v) {			
+
+				    	    Toast.makeText(getBaseContext(), "Save Clicked", Toast.LENGTH_SHORT).show();    	    
+				    	    //  Here is where we will actually save the template file
+				    	    //  Work on this another day!!!!!!!!!!!!!!!!!!!!!!!!!!!
+				    	    
+				    	    
+				    	    
+		        			confirmSaveTemplate.dismiss();			
+					
+		                }
+		            });	
+				    
+				    confirmSaveTemplate.show();
+		    	    
+		    	    //  Might not need the following code....
+				    
+				    //  Check file system
+		    	    //File pictureDirectory = new File(root + "/Pictures/icons");
+		    	    fileDirectory = new File(root + "/Android/data/templates");
+		    	    if (fileDirectory.isDirectory()) {
+		            	
+		        	    Toast.makeText(getBaseContext(), "It's a directory", Toast.LENGTH_SHORT).show();             	
+
+		           	    File[] listFiles2;
+		        	    listFiles2 = fileDirectory.listFiles();
+		        		            	
+		                for (int picturePointer = 0; picturePointer < listFiles2.length; picturePointer++)
+		                {            	    
+		                	   
+		            	    Toast.makeText(getBaseContext(), listFiles2[picturePointer].toString(), Toast.LENGTH_SHORT).show(); 
+		                }  // end for
+		                
+		            }
+		    	    else {
+		        	    Toast.makeText(getBaseContext(), "Not currently a directory.  Making directory.", Toast.LENGTH_SHORT).show();
+
+		        	    fileDirectory.mkdirs();
+		    	    }
+		    	    
+		    	    
 		    	    Toast.makeText(getBaseContext(), "Number Of Objects " + associations.size() , Toast.LENGTH_SHORT).show();    	
 		    	    
 		    		for(ObjectAssociation association : associations){
@@ -1061,6 +1233,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
                 }
             });				
 			
+//***********************************  I think the previous is for the inner dialog box ******************************
 			
 		    final Button btnCancelPositionTrackOpen = (Button) dialogNewTemplate.findViewById(R.id.btnCancelTemplate);
 			

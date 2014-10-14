@@ -1466,8 +1466,8 @@ containing a value of this type.
     }
     public static final class id {
         public static final int RelativeLayout1=0x7f080060;
-        public static final int action_about=0x7f080086;
-        public static final int action_address=0x7f080077;
+        public static final int action_about=0x7f080088;
+        public static final int action_address=0x7f080079;
         public static final int action_bar=0x7f08002e;
         public static final int action_bar_activity_content=0x7f080027;
         public static final int action_bar_container=0x7f08002d;
@@ -1476,27 +1476,27 @@ containing a value of this type.
         public static final int action_bar_subtitle=0x7f080035;
         public static final int action_bar_title=0x7f080034;
         public static final int action_context_bar=0x7f08002f;
-        public static final int action_help=0x7f080087;
-        public static final int action_latlong=0x7f080076;
-        public static final int action_mark_location=0x7f08007c;
+        public static final int action_help=0x7f080089;
+        public static final int action_latlong=0x7f080078;
+        public static final int action_mark_location=0x7f08007e;
         public static final int action_menu_divider=0x7f080028;
         public static final int action_menu_presenter=0x7f080029;
         public static final int action_mode_close_button=0x7f080036;
-        public static final int action_move=0x7f080075;
-        public static final int action_position_track=0x7f080079;
-        public static final int action_position_track_new_template=0x7f080080;
-        public static final int action_position_track_open=0x7f08007d;
-        public static final int action_position_track_open_template=0x7f08007f;
-        public static final int action_position_track_save=0x7f08007e;
-        public static final int action_position_track_start=0x7f08007a;
-        public static final int action_position_track_stop=0x7f08007b;
-        public static final int action_settings=0x7f080074;
-        public static final int action_thislocation=0x7f080078;
-        public static final int action_time_track=0x7f080081;
-        public static final int action_time_track_open=0x7f080084;
-        public static final int action_time_track_save=0x7f080085;
-        public static final int action_time_track_start=0x7f080082;
-        public static final int action_time_track_stop=0x7f080083;
+        public static final int action_move=0x7f080077;
+        public static final int action_position_track=0x7f08007b;
+        public static final int action_position_track_new_template=0x7f080082;
+        public static final int action_position_track_open=0x7f08007f;
+        public static final int action_position_track_open_template=0x7f080081;
+        public static final int action_position_track_save=0x7f080080;
+        public static final int action_position_track_start=0x7f08007c;
+        public static final int action_position_track_stop=0x7f08007d;
+        public static final int action_settings=0x7f080076;
+        public static final int action_thislocation=0x7f08007a;
+        public static final int action_time_track=0x7f080083;
+        public static final int action_time_track_open=0x7f080086;
+        public static final int action_time_track_save=0x7f080087;
+        public static final int action_time_track_start=0x7f080084;
+        public static final int action_time_track_stop=0x7f080085;
         public static final int activity_chooser_view_content=0x7f080037;
         public static final int always=0x7f08001e;
         public static final int beginning=0x7f080023;
@@ -1505,12 +1505,14 @@ containing a value of this type.
         public static final int btnCancel2=0x7f080068;
         public static final int btnCancelTemplate=0x7f08006b;
         public static final int btnDelete=0x7f080073;
+        public static final int btnDeleteTemplate=0x7f080075;
         public static final int btnGoTo=0x7f080063;
         public static final int btnGoto2=0x7f080067;
         public static final int btnOK=0x7f080058;
         public static final int btnOK2=0x7f080050;
         public static final int btnOK3=0x7f080051;
         public static final int btnOpen=0x7f080071;
+        public static final int btnOpenTemplate=0x7f080074;
         public static final int btnSave=0x7f080072;
         public static final int btnSaveTemplate=0x7f08006c;
         public static final int btnSetZoom=0x7f08005a;
@@ -1665,7 +1667,9 @@ containing a value of this type.
         public static final int customopen=0x7f030021;
         public static final int customsave=0x7f030022;
         public static final int fragment_track=0x7f030023;
-        public static final int support_simple_spinner_dropdown_item=0x7f030024;
+        public static final int open_template=0x7f030024;
+        public static final int save_template=0x7f030025;
+        public static final int support_simple_spinner_dropdown_item=0x7f030026;
     }
     public static final class menu {
         public static final int about=0x7f0c0000;
@@ -1725,9 +1729,9 @@ containing a value of this type.
         public static final int action_mark_location=0x7f070055;
         public static final int action_move=0x7f07002a;
         public static final int action_position_track=0x7f070052;
-        public static final int action_position_track_new_template=0x7f070060;
+        public static final int action_position_track_new_template=0x7f070061;
         public static final int action_position_track_open=0x7f070056;
-        public static final int action_position_track_open_template=0x7f07005f;
+        public static final int action_position_track_open_template=0x7f070060;
         public static final int action_position_track_save=0x7f070057;
         public static final int action_position_track_start=0x7f070053;
         public static final int action_position_track_stop=0x7f070054;
@@ -1842,10 +1846,11 @@ containing a value of this type.
         public static final int latitude=0x7f07002f;
         public static final int longitude=0x7f070030;
         public static final int open_file=0x7f070058;
+        public static final int open_template=0x7f07005e;
         public static final int radTrafficOff=0x7f070047;
         public static final int radTrafficOn=0x7f070046;
         public static final int save_file=0x7f070059;
-        public static final int save_template=0x7f07005e;
+        public static final int save_template=0x7f07005f;
         public static final int strAbout1=0x7f07003c;
         public static final int strChangeSettings=0x7f070048;
         public static final int strDefaultSettings=0x7f070049;

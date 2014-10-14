@@ -30,7 +30,7 @@ public class ObjectAssociation {
 			// for some reason this seems to always return true
 			if(associations.get(i).equals(utterance)){
 		        utteranceFound = true;
-		        Log.i("testresults", utterance + " " +associations.get(i) );
+		        Log.i("testresults", utterance + " " + associations.get(i) );
 		        
 			}
 			
