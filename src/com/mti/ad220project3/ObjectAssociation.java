@@ -46,4 +46,10 @@ public class ObjectAssociation {
 	public void addUtterance(String utterance) {
 		associations.add(utterance);
 	}
+
+	public ArrayList<String> getAssociations() {
+		
+		return associations;
+	}
+	
 }

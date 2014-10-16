@@ -7,13 +7,17 @@ package com.mti.ad220project3;
 
 
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -48,6 +52,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -918,8 +923,214 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 
 		    final Dialog templateOpen = new Dialog(this);			    
 		    templateOpen.setContentView(R.layout.open_template);			
+
+		    
+		    // First populate the listview with the file names
+
+		    //  Cutting and pasting code - start
+
+		    
+		    final TextView textViewFile = (TextView) templateOpen.findViewById(R.id.textViewFile);
+		    
+		    final ListView listViewFiles = (ListView) templateOpen.findViewById(R.id.listviewfiles);
+		    
+		    //  Set the ListView to list the files
+		    ArrayAdapter adapterFiles = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_spinner_item);
+		    adapterFiles.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);		    
+	    		    
+		    		             
+    	  		    
+    	    //  Here we will show all the files in the templates folder			    
+		  
+       	    final File[] listFilesOpen;
+
+    	    final String rootOpen;
+    	    
+    	    rootOpen = Environment.getExternalStorageDirectory().getAbsolutePath();
+    	    
+
+    	    BitmapFactory.Options optionsOpen = new BitmapFactory.Options();
+    	    optionsOpen.inPreferredConfig = Bitmap.Config.ARGB_8888;
+    	    
+    	    final File fileDirectory = new File(rootOpen + "/Android/data/templates");
+
+    	    
+    	   
+ 	         	     
+            if (fileDirectory.isDirectory())
+            {
+            	
+        	    Toast.makeText(getBaseContext(), "It's a directory", Toast.LENGTH_SHORT).show();             	
+        	    
+        	    listFilesOpen = fileDirectory.listFiles();
+        	    
+        	    
+                for (int filePointer = 0; filePointer < listFilesOpen.length; filePointer++)
+                {            	    
+
+            	    adapterFiles.add(listFilesOpen[filePointer].getName());
+                	   
+            	    //Toast.makeText(getBaseContext(), listFiles[picturePointer].toString(), Toast.LENGTH_SHORT).show(); 
+                }  // end for
+            	
+
+            } 
+            
+            else {
+        	    Toast.makeText(getBaseContext(), "Not currently a directory.  Making directory.", Toast.LENGTH_SHORT).show();
+
+        	    fileDirectory.mkdirs();
+            
+            }
+    	    
+		    listViewFiles.setAdapter(adapterFiles);	
+		    
+
+		    //  set up listview to list files  files should be clickable
+		    listViewFiles.setClickable(true);
+		    listViewFiles.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+		        @Override
+		        public void onItemClick(AdapterView<?> arg0, View view1, int position, long arg3) {
+
+		        	//  onclick, get the associated file
+		        	
+		        	File pictureDirectory = new File(rootOpen + "/Android/data/templates");
+	        	    File[] listFiles2 = pictureDirectory.listFiles();		        	
+		        	
+	        	    //  This would get the entire path
+	        	    //associatedFile = listFiles2[position].getAbsolutePath();
+	        	    //  Let's try to return just the file name.  This seems to be null.
+	        	    associatedFile = listFiles2[position].getName();
+	        	    	
+		            // reset all unselected items as white.  This is the only way I figured out how to do this.
+		            for(int i =0; i<arg0.getChildCount(); i++) {
+		            	arg0.getChildAt(i).setBackgroundColor(Color.WHITE);
+		            }	  
+		            
+		            arg0.getItemAtPosition(position);
+								    		                		
+                	listViewFiles.setItemChecked(position, true);
+                    view1.setBackgroundColor(Color.BLUE);
+	        	    
+                    textViewFile.setText(associatedFile);
+		            Toast.makeText(getApplicationContext(),associatedFile,Toast.LENGTH_SHORT).show();                    
+		            //Toast.makeText(getApplicationContext(),"Clicked!",Toast.LENGTH_SHORT).show();
+		        }
+		    });
+		    		    
+		    
+		    // This will be for cancel button
+		    final Button btnCancelTemplate = (Button) templateOpen.findViewById(R.id.btnCancelTemplate);
+			
+			btnCancelTemplate.setOnClickListener(new View.OnClickListener() {
+			
+                @Override
+                public void onClick(View v) {			
+
+		    	    Toast.makeText(getBaseContext(), "Cancel Clicked", Toast.LENGTH_SHORT).show();    	    
+
+        			templateOpen.dismiss();			
+			
+                }
+            });			    
+		    
+		    // This will be for open button
+		    final Button btnOpenTemplate = (Button) templateOpen.findViewById(R.id.btnOpenTemplate);
+			
+			btnOpenTemplate.setOnClickListener(new View.OnClickListener() {
+			
+                @Override
+                public void onClick(View v) {			
+
+		    	    Toast.makeText(getBaseContext(), "Open Clicked", Toast.LENGTH_SHORT).show();    	    
+
+		    	    
+		        	File myDir = getFilesDir();
+		        	
+		    	    Toast.makeText(getBaseContext(), "MyDir = " + fileDirectory, Toast.LENGTH_SHORT).show();   
+
+		    	    
+		    	    String inputFile = fileDirectory + textViewFile.getText().toString();
+		    	    
+		    	    String inputString;
+		    	    Toast.makeText(getBaseContext(), "So it gets here", Toast.LENGTH_SHORT).show();  		    	    
+					try {
+			
+			    	    Toast.makeText(getBaseContext(), "How about here", Toast.LENGTH_SHORT).show();  						
+						//String inputFile = spinner2.getSelectedItem().toString();
+						InputStream in = openFileInput(inputFile);
+			    	    Toast.makeText(getBaseContext(), "and here", Toast.LENGTH_SHORT).show();  
+						if(in != null) {
+							
+							InputStreamReader tmp = new InputStreamReader(in);
+							BufferedReader reader = new BufferedReader(tmp);
+					
+							StringBuilder buf= new StringBuilder();
+							while((inputString= reader.readLine())!=null) {
+								
+								buf.append(inputString + "\n");
+								
+							}
+							in.close();
+							//textEditor.setText(buf.toString());
+							
+							Toast.makeText(getBaseContext(), "This is the string:" + inputString, Toast.LENGTH_LONG).show();											
+						}
+						else {
+							Toast.makeText(getBaseContext(), "No input file", Toast.LENGTH_LONG).show();											
+							
+						}
+					} catch(java.io.FileNotFoundException e) {
+						
+						Toast.makeText(getBaseContext(), "Error reading the string", Toast.LENGTH_LONG).show();											
+									
+					}
+					
+					catch (Throwable t) {
+						
+						//Toast.makeText(this, "Exception" + t.toString(), Toast.LENGTH_LONG).show();
+					}
+					
+		    	    
+		    	    
+		    	    
+		    	    
+		    	        
+		    	    
+		    			    	    
+        			templateOpen.dismiss();			
+			
+                }
+            });	
 			
 
+		    // This will be for cancel button
+		    final Button btnDeleteTemplate = (Button) templateOpen.findViewById(R.id.btnDeleteTemplate);
+			
+			btnDeleteTemplate.setOnClickListener(new View.OnClickListener() {
+			
+                @Override
+                public void onClick(View v) {			
+
+		    	    Toast.makeText(getBaseContext(), "Delete Clicked", Toast.LENGTH_SHORT).show();    	    
+
+
+		    	    try {
+		    	        // delete the original file
+		    	        //new File(fileDirectory + "/" + "template20149151851").delete();  
+		    	        new File(fileDirectory + "/" + textViewFile.getText().toString()).delete();  		    	        
+		    	        
+			    	    Toast.makeText(getBaseContext(), "file is " + fileDirectory + "/" + "template20149151851", Toast.LENGTH_SHORT).show(); 
+		    	    } catch (Exception e) {
+		    	        Log.e("tag", e.getMessage());
+		    	    }
+		    	    
+		    	    templateOpen.dismiss();			
+			
+                }
+            });			    
+		    
 		    templateOpen.show();
 		    
 			break;
@@ -988,7 +1199,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 		    listViewImages.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
 		        @Override
-		        public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
+		        public void onItemClick(AdapterView<?> arg0, View view1, int position, long arg3) {
 
 		        	
 		        	//  on click we want to change what this associated Image is going to be
@@ -1007,7 +1218,19 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 	        	    
 	        	    Bitmap bitmap = BitmapFactory.decodeFile(listFiles2[position].getAbsolutePath(), options);
                 	imageViewPicture.setImageBitmap(bitmap); 
-		        	
+
+
+                	
+		            // reset all unselected items as white.  This is the only way I figured out how to do this.
+		            for(int i =0; i<arg0.getChildCount(); i++) {
+		            	arg0.getChildAt(i).setBackgroundColor(Color.WHITE);
+		            }	  
+		            
+		            arg0.getItemAtPosition(position);
+								    		                		
+                	listViewImages.setItemChecked(position, true);
+                    view1.setBackgroundColor(Color.BLUE);
+                	
 		            //Toast.makeText(getApplicationContext(),"Clicked!",Toast.LENGTH_SHORT).show();
 		        }
 		    });
@@ -1088,8 +1311,18 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 
 		    	    BitmapFactory.Options options = new BitmapFactory.Options();
 		    	    options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+
+				    //  End of cut and pasted code
+				    final EditText textViewFiles = (EditText) confirmSaveTemplate.findViewById(R.id.txtFileName);
+				    
+				    Calendar c1 = Calendar.getInstance();      
+				    String dateStamp = String.valueOf(c1.get(Calendar.YEAR)) + c1.get(Calendar.MONTH) + c1.get(Calendar.DAY_OF_MONTH) + c1.get(Calendar.HOUR_OF_DAY) + c1.get(Calendar.MINUTE);
+				    //  Set the default name of the template file				    
+				    textViewFiles.setText("template" + dateStamp);
 		    	    
-		    	    File fileDirectory = new File(root + "/Android/data/templates");
+		    	    
+		    	    
+		    	    final File fileDirectory = new File(root + "/Android/data/templates");
 
 		    	    
 		    	   
@@ -1124,11 +1357,11 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 				    
 
 				    //  set up listview to list files  files should be clickable
-				    listViewImages.setClickable(true);
-				    listViewImages.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+				    listViewFiles.setClickable(true);
+				    listViewFiles.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
 				        @Override
-				        public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
+				        public void onItemClick(AdapterView<?> arg0, View view1, int position, long arg3) {
 
 				        	//  onclick, get the associated file
 				        	
@@ -1139,22 +1372,22 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 			        	    associatedFile = listFiles2[position].getAbsolutePath();
 			        	    //  Let's try to return just the file name.  This seems to be null.
 			        	    associatedFile = listFiles2[position].getName();
-			        	    	
-				        	
+
+				            // reset all unselected items as white.  This is the only way I figured out how to do this.
+				            for(int i =0; i<arg0.getChildCount(); i++) {
+				            	arg0.getChildAt(i).setBackgroundColor(Color.WHITE);
+				            }	  
+				            
+				            arg0.getItemAtPosition(position);
+										    		                		
+		                	listViewFiles.setItemChecked(position, true);
+		                    view1.setBackgroundColor(Color.BLUE);
+
+						    textViewFiles.setText(associatedFile);
 				            //Toast.makeText(getApplicationContext(),"Clicked!",Toast.LENGTH_SHORT).show();
 				        }
 				    });
-				    
-				    
-				    //  End of cut and pasted code
-				    final EditText textViewFiles = (EditText) confirmSaveTemplate.findViewById(R.id.txtFileName);
-				    
-				    Calendar c1 = Calendar.getInstance();      
-				    String dateStamp = String.valueOf(c1.get(Calendar.YEAR)) + c1.get(Calendar.MONTH) + c1.get(Calendar.DAY_OF_MONTH) + c1.get(Calendar.HOUR_OF_DAY) + c1.get(Calendar.MINUTE);
-				    //  Set the default name of the template file				    
-				    textViewFiles.setText("template" + dateStamp);
-				    
-				    
+				    				    
 				    
 				   
 				    // This will be for cancel button
@@ -1183,6 +1416,50 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 				    	    //  Here is where we will actually save the template file
 				    	    //  Work on this another day!!!!!!!!!!!!!!!!!!!!!!!!!!!
 				    	    
+				            String filename = textViewFiles.getText().toString();
+				            String outputString="";
+				            
+
+				            //  Here is where we will create the string associations to save to a text file!!!
+				    		for(ObjectAssociation association : associations){
+				    			outputString=outputString + "<name>"+ association.getName() + "\n";
+				    			
+				    			ArrayList<String> utterances = association.getAssociations();
+					    		for(String utterance : utterances){
+					    			outputString=outputString + "	<utter>" + utterance + "</>\n";					    			
+					    			
+					    		}
+				    			outputString=outputString + "</>\n";				    		
+				    			
+				    		}				            
+				            
+				            
+			    		    Toast.makeText(getBaseContext(), outputString, Toast.LENGTH_LONG).show();				            
+				            
+				        	File myDir = getFilesDir();
+				        	
+				    	    Toast.makeText(getBaseContext(), "MyDir = " + fileDirectory, Toast.LENGTH_SHORT).show();   
+				    	    
+				            try {
+
+				            	File secondFile = new File(fileDirectory + "/", filename);
+				                if (secondFile.getParentFile().mkdirs()) {
+				                    secondFile.createNewFile();
+				                }
+				                
+				                FileOutputStream fos = new FileOutputStream(secondFile);
+
+				                fos.write(outputString.getBytes());
+				                fos.flush();
+				                fos.close();
+				    		    Toast.makeText(getBaseContext(), "File created", Toast.LENGTH_SHORT).show();
+				                
+				            } catch (Exception e) {
+				                e.printStackTrace();
+				                
+				    		    Toast.makeText(getBaseContext(), "File not created", Toast.LENGTH_SHORT).show();            
+				            }
+				    	    
 				    	    
 				    	    
 		        			confirmSaveTemplate.dismiss();			
@@ -1190,13 +1467,43 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 		                }
 		            });	
 				    
-				    confirmSaveTemplate.show();
+				    // This will be for delete button
+				    final Button btnDeleteTemplate = (Button) confirmSaveTemplate.findViewById(R.id.btnDeleteTemplate);
+					
+					btnDeleteTemplate.setOnClickListener(new View.OnClickListener() {
+					
+						// Change this to whatever you want to name it
+						String inputFile = textViewFiles.getText().toString();
+						
+		                @Override
+		                public void onClick(View v) {			
+
+				    	    Toast.makeText(getBaseContext(), "Delete Clicked", Toast.LENGTH_SHORT).show();    	    
+
+				    	    try {
+				    	        // delete the original file
+				    	        //new File(fileDirectory + "/" + inputFile).delete();  
+
+				    	        new File(fileDirectory + "/" + textViewFiles.getText().toString()).delete(); 				    	        
+					    	    Toast.makeText(getBaseContext(), "Attempting to delete" + fileDirectory + "/" + inputFile, Toast.LENGTH_SHORT).show();
+				    	    } catch (Exception e) {
+				    	        Log.e("tag", e.getMessage());
+				    	    }
+				    	    
+		        			confirmSaveTemplate.dismiss();			
+					
+		                }
+		            });	
+		    		
+					
+					
+					confirmSaveTemplate.show();
 		    	    
 		    	    //  Might not need the following code....
 				    
 				    //  Check file system
 		    	    //File pictureDirectory = new File(root + "/Pictures/icons");
-		    	    fileDirectory = new File(root + "/Android/data/templates");
+		    	    //fileDirectory = new File(root + "/Android/data/templates");
 		    	    if (fileDirectory.isDirectory()) {
 		            	
 		        	    Toast.makeText(getBaseContext(), "It's a directory", Toast.LENGTH_SHORT).show();             	
@@ -1226,7 +1533,10 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 			    	    
 		    		}
 		    	    
-		    	    
+
+
+		    		
+		    		
 		    	    
 		    	    dialogNewTemplate.dismiss();			
 			
