@@ -41,6 +41,7 @@ import android.preference.PreferenceManager;
 import android.speech.RecognizerIntent;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.util.Xml;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -123,6 +124,8 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 	  //  ArrayList of ObjectAssociation objects
 	  private ArrayList<ObjectAssociation> associations;
 	  
+	  //  Set if you are training the speech recognition
+	  private boolean trainingMode=false;
 	  
 	  //  This will store locations
 	  ArrayList<LocationItem> locations = new ArrayList<LocationItem>();
@@ -580,14 +583,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 				info = i.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
 			
 			//}
-			
-			//if(info.get(0).contains("test")) {
-			//	Toast.makeText(this, "word detected", Toast.LENGTH_LONG).show();				
-			//}	else {
-			//	
-			//	Toast.makeText(this, "word not detected", Toast.LENGTH_LONG).show();				
-			//}
-			
+						
 			
 			
 			break;
@@ -1048,39 +1044,37 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 		    	    
 		        	File myDir = getFilesDir();
 		        	
-		    	    Toast.makeText(getBaseContext(), "MyDir = " + fileDirectory, Toast.LENGTH_SHORT).show();   
+		    	    //Toast.makeText(getBaseContext(), "MyDir = " + fileDirectory, Toast.LENGTH_SHORT).show();   
+
+		    	    Toast.makeText(getBaseContext(), "File: " + fileDirectory + "/" +  textViewFile.getText().toString(), Toast.LENGTH_LONG).show();  		    	    
+		    	    String inputFile = fileDirectory + "/" +  textViewFile.getText().toString();
+		    	    
+		    	    String inputString;  		    	    
 
 		    	    
-		    	    String inputFile = fileDirectory + textViewFile.getText().toString();
+		    	    File file = new File(inputFile);
+		    	    FileInputStream fin = null;
+		    	    String fileContents = "";
+	       	    		 
+	    	    	byte fileContent[] = new byte[(int)file.length()];
 		    	    
-		    	    String inputString;
-		    	    Toast.makeText(getBaseContext(), "So it gets here", Toast.LENGTH_SHORT).show();  		    	    
-					try {
+		    	    try {
 			
-			    	    Toast.makeText(getBaseContext(), "How about here", Toast.LENGTH_SHORT).show();  						
-						//String inputFile = spinner2.getSelectedItem().toString();
-						InputStream in = openFileInput(inputFile);
-			    	    Toast.makeText(getBaseContext(), "and here", Toast.LENGTH_SHORT).show();  
-						if(in != null) {
-							
-							InputStreamReader tmp = new InputStreamReader(in);
-							BufferedReader reader = new BufferedReader(tmp);
+			    	    //FileInputStream in = new FileInputStream (new File(inputFile)); 
+		                // create FileInputStream object
+		    	    	fin = new FileInputStream(file);
+		   
+		    	    		             
+		    	    	// Reads up to certain bytes of data from this input stream into an array of bytes.
+		    	    	fin.read(fileContent);
+		    	    	//create string from byte array
+		    	    	fileContents = new String(fileContent);
+		    	    	//System.out.println("File content: " + s);
+			    	    
+			    	    Toast.makeText(getBaseContext(), fileContents, Toast.LENGTH_LONG).show();  			    	    
+			    	    //Toast.makeText(getBaseContext(), "here", Toast.LENGTH_SHORT).show();  
 					
-							StringBuilder buf= new StringBuilder();
-							while((inputString= reader.readLine())!=null) {
-								
-								buf.append(inputString + "\n");
-								
-							}
-							in.close();
-							//textEditor.setText(buf.toString());
-							
-							Toast.makeText(getBaseContext(), "This is the string:" + inputString, Toast.LENGTH_LONG).show();											
-						}
-						else {
-							Toast.makeText(getBaseContext(), "No input file", Toast.LENGTH_LONG).show();											
-							
-						}
+	
 					} catch(java.io.FileNotFoundException e) {
 						
 						Toast.makeText(getBaseContext(), "Error reading the string", Toast.LENGTH_LONG).show();											
@@ -1089,15 +1083,38 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 					
 					catch (Throwable t) {
 						
-						//Toast.makeText(this, "Exception" + t.toString(), Toast.LENGTH_LONG).show();
+						Toast.makeText(getBaseContext(), "Exception" + t.toString(), Toast.LENGTH_LONG).show();
+						
+						
 					}
 					
+		    	    associations.clear();
+		    	    String objectName;
+		    	    String utterance;
 		    	    
 		    	    
-		    	    
-		    	    
-		    	        
-		    	    
+		    	    //  parsing through contents of file
+		    	    String[] objectString = fileContents.split("<name=");
+			
+		    	    for(int i = 1; i<objectString.length; i++) {
+			    	    Toast.makeText(getBaseContext(), "string = " + objectString[i], Toast.LENGTH_LONG).show();		    	    	
+						
+			    	  
+			    	    objectName = objectString[i].substring(0, objectString[i].indexOf(">"));  	   
+						ObjectAssociation myAssociation = new ObjectAssociation(objectName);			    	    
+			    	    
+			    	    Toast.makeText(getBaseContext(), "object = " + objectName, Toast.LENGTH_LONG).show();				    	   
+			    	    
+			    	    String[] utterString = objectString[i].split("<utter=");
+			    	    for(int j = 1; j<utterString.length; j++) {				    	    	
+			    	    	utterance = utterString[j].substring(0,utterString[j].indexOf("></utter>"));
+							myAssociation.addUtterance(utterance);			    	    	
+			    	    	
+			    	    	Toast.makeText(getBaseContext(), "utter = " + utterance, Toast.LENGTH_LONG).show();				    	    
+			    	    }
+						associations.add(myAssociation);
+		    	    }
+		    	    		    	    
 		    			    	    
         			templateOpen.dismiss();			
 			
@@ -1141,6 +1158,8 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 					    
 		    final ListView listViewImages = (ListView) dialogNewTemplate.findViewById(R.id.listviewimages);
 		    final ImageView imageViewPicture = (ImageView) dialogNewTemplate.findViewById(R.id.imageViewPicture);
+
+		    trainingMode = true;
 		    
 		    //  Set the ListView to list the files
 		    ArrayAdapter adapterImages = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
@@ -1413,6 +1432,9 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 		                public void onClick(View v) {			
 
 				    	    Toast.makeText(getBaseContext(), "Save Clicked", Toast.LENGTH_SHORT).show();    	    
+
+				    	    trainingMode = false;
+				    	    
 				    	    //  Here is where we will actually save the template file
 				    	    //  Work on this another day!!!!!!!!!!!!!!!!!!!!!!!!!!!
 				    	    
@@ -1422,14 +1444,14 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 
 				            //  Here is where we will create the string associations to save to a text file!!!
 				    		for(ObjectAssociation association : associations){
-				    			outputString=outputString + "<name>"+ association.getName() + "\n";
+				    			outputString=outputString + "<name="+ association.getName() + ">\n";
 				    			
 				    			ArrayList<String> utterances = association.getAssociations();
 					    		for(String utterance : utterances){
-					    			outputString=outputString + "	<utter>" + utterance + "</>\n";					    			
+					    			outputString=outputString + "	<utter=" + utterance + "></utter>\n";					    			
 					    			
 					    		}
-				    			outputString=outputString + "</>\n";				    		
+				    			outputString=outputString + "</name>\n";				    		
 				    			
 				    		}				            
 				            
@@ -1554,7 +1576,9 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 
 		    	    Toast.makeText(getBaseContext(), "Cancel Clicked", Toast.LENGTH_SHORT).show();    	    
 
-        			dialogNewTemplate.dismiss();			
+		    	    trainingMode = false;
+
+		    	    dialogNewTemplate.dismiss();			
 			
                 }
             });			
@@ -2090,6 +2114,10 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 	        super.onActivityResult(requestCode, resultCode, data);
+	        
+	        boolean objectFound=false;
+	        String correctObject = "";
+	        
 	        if (requestCode==REQUEST_OK  && resultCode==RESULT_OK) {
 	        		ArrayList<String> thingsYouSaid = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
 	        		utterance = thingsYouSaid.get(0);
@@ -2098,16 +2126,60 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 	    			//Toast.makeText(this, "Length = " + thingsYouSaid.size(), Toast.LENGTH_LONG).show();
 	    			Toast.makeText(this, associatedImage + " - " + utterance, Toast.LENGTH_LONG).show();	
 	     
-		    	    addAssociation(associatedImage, utterance);
-		    	    
-	    			LatLng newLatLng = new LatLng(pLat, pLong);
+		    	    // Why am I doing this?????
+	    			if(trainingMode) {
+	    				addAssociation(associatedImage, utterance);
+	    			} else {
+	    				
+	    				
+	    				
+		    			//  First go through each object association in arraylist
+			    		for(ObjectAssociation association : associations){
+			    			if(association.checkForAssociations(thingsYouSaid.get(0))) {
+				    			Toast.makeText(this, "This is what you meant:" + association.getName(), Toast.LENGTH_LONG).show();	
+				    			objectFound = true;
+				    			correctObject = association.getName();
+			    			}			    			
+			    			
+			    		}	    				
+	    			}
+	    				
+	    
+	    			
+	    			if(objectFound) {
+		    			String root;
+	    	    	    root = Environment.getExternalStorageDirectory().getAbsolutePath();
 
+	    	    	    
+		    			Toast.makeText(this, root + "/Pictures/icons/" + correctObject , Toast.LENGTH_LONG).show();	
+		    			LatLng newLatLng = new LatLng(pLat, pLong);		    				
+	    				Marker mti = map.addMarker(new MarkerOptions().position(newLatLng)
+	    						.title("MTI")    	
+	    						.position(newLatLng)
+	    						.title("MTI")
+	    						.snippet("test")
+	    						.icon(BitmapDescriptorFactory
+	    								//  from file does not appear to be working yet
+	    								//  This is the right file path name....
+	    								.fromPath(root + "/Pictures/icons/" + correctObject)));
+	    								//.fromFile(root + "/Pictures/icons/" + correctObject)));	    				
+	    								//.fromResource(R.drawable.grapes)));
+	    								
+	    			} else {
+		    			Toast.makeText(this, "No object found for this utterance", Toast.LENGTH_LONG).show();	    				
+	    			}
+	    			
+	    			
+	
+
+	    			
 	    			
 	    			
 	    			if(thingsYouSaid.get(0).equals("done") ) {
 	    				positionTracking = false;
 	    			}	    	    	
 	    	    	
+	    			/*
 	    			if(thingsYouSaid.get(0).equals("grape")||thingsYouSaid.get(0).equals("grapes")||thingsYouSaid.get(0).equals("great")||thingsYouSaid.get(0).equals("grace")||thingsYouSaid.get(0).equals("drapes") ) {
 	    				Marker mti = map.addMarker(new MarkerOptions().position(newLatLng)
 	    						.title("MTI")    	
@@ -2130,7 +2202,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 
 		    	        locations.add(new LocationItem(pLat, pLong, 0, pAlt, "blackberries", "This is just for test purposes right now"));	    				
 	    			}
-	    				    			
+	    			*/	    			
 	        }
 	    }
 	
@@ -2150,15 +2222,21 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 				if(association.checkForAssociations(utterance)==true) {
 				    Toast.makeText(getBaseContext(), "Utterance was found", Toast.LENGTH_SHORT).show();	
 					utteranceFound = true;
+				} else {
+				    Toast.makeText(getBaseContext(), "Utterance wasn't found for image", Toast.LENGTH_SHORT).show();					
+					
+				    //  no utterance found.  Add to utterances
+					association.addUtterance(utterance);					
 				}
 				
 			}
-			if (utteranceFound==false) {
-			    Toast.makeText(getBaseContext(), "Utterance wasn't found for image", Toast.LENGTH_SHORT).show();					
+			//  Testing this - seems to work right now.  Will thoroughly test this before deleting this
+			//if (utteranceFound==false) {
+			//    Toast.makeText(getBaseContext(), "Utterance wasn't found for image", Toast.LENGTH_SHORT).show();					
 				
 			    //  no utterance found.  Add to utterances
-				association.addUtterance(utterance);
-			}
+			//	association.addUtterance(utterance);
+			//}
 			
 		}
 		

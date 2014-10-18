@@ -51,5 +51,9 @@ public class ObjectAssociation {
 		
 		return associations;
 	}
-	
+
+	public void clearAll() {
+		//  Not sure if I will need this....
+		associations.clear();
+	}
 }
