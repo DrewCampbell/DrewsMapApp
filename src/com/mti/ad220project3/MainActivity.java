@@ -74,6 +74,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 	
 	//  Created by Andrew Campbell
 	//  Submitting project on 8/8/2014
+	//  Additions to project complete 10/25/14
 	//  Project for mti add220 android application development
 	//  Will try to submit this in play store under AD220Project3AndrewCa
 	
@@ -370,7 +371,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
                 @Override
                 public void onClick(View v) {			
 
-		    	    Toast.makeText(getBaseContext(), "Cancel Clicked", Toast.LENGTH_SHORT).show();    	    
+		    	    //Toast.makeText(getBaseContext(), "Cancel Clicked", Toast.LENGTH_SHORT).show();    	    
 
         			dialog.dismiss();			
 			
@@ -466,7 +467,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
                 @Override
                 public void onClick(View v) {			
 
-		    	    Toast.makeText(getBaseContext(), "Cancel Clicked", Toast.LENGTH_SHORT).show();    	    
+		    	    //Toast.makeText(getBaseContext(), "Cancel Clicked", Toast.LENGTH_SHORT).show();    	    
 
         			dialog2.dismiss();			
 			
@@ -629,7 +630,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 
 				    
 					String fileName = listViewFilesOpen.getItemAtPosition(position).toString();
-					Toast.makeText(getBaseContext(), fileName, Toast.LENGTH_LONG).show();
+					//Toast.makeText(getBaseContext(), fileName, Toast.LENGTH_LONG).show();
 					
 					txtOpenFileName.setText(fileName);
 					
@@ -647,7 +648,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
                 public void onClick(View v) {
                 	
 		    	  
-		    	    Toast.makeText(getBaseContext(), "Open Clicked", Toast.LENGTH_SHORT).show();                  	
+		    	    //Toast.makeText(getBaseContext(), "Open Clicked", Toast.LENGTH_SHORT).show();                  	
 		   
 		    	    String tableName = txtOpenFileName.getText().toString();
 		    	    
@@ -658,9 +659,13 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 		    			    	   
 	    	    
 		    	    map.clear();
+		    	    final String root;
+		    	    
+		    	    root = Environment.getExternalStorageDirectory().getAbsolutePath();
 		    	    
 		    	    cursor = databaseConnect.returnData(tableName);
-
+		    	     
+		    	    
 		    	    if (cursor.moveToFirst()) {
 		    	        while ( !cursor.isAfterLast() ) {
 		    	            Toast.makeText(getBaseContext(), "LocID:"+ cursor.getString(0) +"Latitude:"+ cursor.getString(1) + ", Longitude:" + cursor.getString(2) + ", Seconds:" + cursor.getString(3) + "Alititude:" + cursor.getString(4) + "Image:" + cursor.getString(5), Toast.LENGTH_LONG).show();
@@ -669,7 +674,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 
 		    	        	LatLng newLatLng = new LatLng(cursor.getDouble(1), cursor.getDouble(2));
 
-		    	        	
+		    	        	/*
 		    	        	if(cursor.getString(5).equals("grapes")) {
 			    	            map.addMarker(new MarkerOptions()
 	    	                    .title("Location")    	
@@ -688,8 +693,27 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 		    	            		.icon(BitmapDescriptorFactory
 		    	            		.fromResource(R.drawable.blackberry)
 		    	            		));    
-		    	   
-		    	            
+		    	   			*/
+		    	        	String fileName;
+	    	        		fileName = cursor.getString(5);
+		    	        	try {
+
+		    	        		map.addMarker(new MarkerOptions()
+		    	        		.title("Location")    	
+		    	        		.position(newLatLng)
+		    	        		.snippet("Time=" + cursor.getLong(3) + "Altitude=" + cursor.getDouble(4))
+		    	        		.icon(BitmapDescriptorFactory
+		    	        		//.fromResource(R.drawable.blackberry)
+		    	        		.fromPath(root + "/Pictures/icons/" + fileName + ".png")    	            		
+		    	        				));
+			    	            Toast.makeText(getBaseContext(), "File name is : " + root + "/Pictures/icons/" + fileName, Toast.LENGTH_LONG).show();
+
+		    	        	} catch(Exception e) {
+			    	            Toast.makeText(getBaseContext(), "Error in file : " + root + "/Pictures/icons/" + fileName + ".png", Toast.LENGTH_LONG).show();
+		    	        		
+		    	        	}
+		    	        	
+		    	        	
 		    	            
 		    	            cursor.moveToNext();
 		    	        }
@@ -831,6 +855,10 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 			    	    double altitude;
 			    	    String image;
 			    	    String timeStamp;
+
+			    	    //  size is now 0????  This was working before
+			    	    Toast.makeText(getBaseContext(), "Size is " + locations.size(), Toast.LENGTH_LONG).show();
+			    	    
 			    	    
 			    	    for (LocationItem location : locations) {
 			    	        latitude = location.getLatitude();
@@ -840,8 +868,11 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 			    	    	image = location.getImage();
 			    	        timeStamp = location.getTimeStamp();
 			    	    	
+		    	            Toast.makeText(getBaseContext(), tableName + " " +latitude + " " +  longitude + " " + seconds + " " + altitude + " " + image + " " + timeStamp, Toast.LENGTH_LONG).show();
+			    	        Log.i("Testing", "errored here???" +  tableName + " " +latitude + " " +  longitude + " " + seconds + " " + altitude + " " + image + " " + timeStamp);
 			    	    	databaseConnect.insertData(tableName, latitude, longitude, seconds,altitude, image, timeStamp);
 			    	    }
+	    	            Toast.makeText(getBaseContext(), "HERE?????????", Toast.LENGTH_LONG).show();
 			    	   			    	    
 
 			    	    cursor = databaseConnect.returnData(tableName);
@@ -956,7 +987,6 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
             if (fileDirectory.isDirectory())
             {
             	
-        	    Toast.makeText(getBaseContext(), "It's a directory", Toast.LENGTH_SHORT).show();             	
         	    
         	    listFilesOpen = fileDirectory.listFiles();
         	    
@@ -966,7 +996,6 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 
             	    adapterFiles.add(listFilesOpen[filePointer].getName());
                 	   
-            	    //Toast.makeText(getBaseContext(), listFiles[picturePointer].toString(), Toast.LENGTH_SHORT).show(); 
                 }  // end for
             	
 
@@ -994,9 +1023,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 		        	File pictureDirectory = new File(rootOpen + "/Android/data/templates");
 	        	    File[] listFiles2 = pictureDirectory.listFiles();		        	
 		        	
-	        	    //  This would get the entire path
-	        	    //associatedFile = listFiles2[position].getAbsolutePath();
-	        	    //  Let's try to return just the file name.  This seems to be null.
+	        	    // return associated file
 	        	    associatedFile = listFiles2[position].getName();
 	        	    	
 		            // reset all unselected items as white.  This is the only way I figured out how to do this.
@@ -1010,8 +1037,8 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
                     view1.setBackgroundColor(Color.BLUE);
 	        	    
                     textViewFile.setText(associatedFile);
-		            Toast.makeText(getApplicationContext(),associatedFile,Toast.LENGTH_SHORT).show();                    
-		            //Toast.makeText(getApplicationContext(),"Clicked!",Toast.LENGTH_SHORT).show();
+		            //Toast.makeText(getApplicationContext(),associatedFile,Toast.LENGTH_SHORT).show();                    
+
 		        }
 		    });
 		    		    
@@ -1024,7 +1051,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
                 @Override
                 public void onClick(View v) {			
 
-		    	    Toast.makeText(getBaseContext(), "Cancel Clicked", Toast.LENGTH_SHORT).show();    	    
+		    	    //Toast.makeText(getBaseContext(), "Cancel Clicked", Toast.LENGTH_SHORT).show();    	    
 
         			templateOpen.dismiss();			
 			
@@ -1039,14 +1066,13 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
                 @Override
                 public void onClick(View v) {			
 
-		    	    Toast.makeText(getBaseContext(), "Open Clicked", Toast.LENGTH_SHORT).show();    	    
+		    	    //Toast.makeText(getBaseContext(), "Open Clicked", Toast.LENGTH_SHORT).show();    	    
 
 		    	    
 		        	File myDir = getFilesDir();
 		        	
-		    	    //Toast.makeText(getBaseContext(), "MyDir = " + fileDirectory, Toast.LENGTH_SHORT).show();   
 
-		    	    Toast.makeText(getBaseContext(), "File: " + fileDirectory + "/" +  textViewFile.getText().toString(), Toast.LENGTH_LONG).show();  		    	    
+		    	    //Toast.makeText(getBaseContext(), "File: " + fileDirectory + "/" +  textViewFile.getText().toString(), Toast.LENGTH_LONG).show();  		    	    
 		    	    String inputFile = fileDirectory + "/" +  textViewFile.getText().toString();
 		    	    
 		    	    String inputString;  		    	    
@@ -1059,8 +1085,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 	    	    	byte fileContent[] = new byte[(int)file.length()];
 		    	    
 		    	    try {
-			
-			    	    //FileInputStream in = new FileInputStream (new File(inputFile)); 
+			 
 		                // create FileInputStream object
 		    	    	fin = new FileInputStream(file);
 		   
@@ -1073,18 +1098,18 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 			    	    
 			    	    Toast.makeText(getBaseContext(), fileContents, Toast.LENGTH_LONG).show();  			    	    
 			    	    //Toast.makeText(getBaseContext(), "here", Toast.LENGTH_SHORT).show();  
-					
+			    	    menuPositionTrackStart.setVisible(true);
+			    	    menuPositionTrackOpen.setVisible(true);
 	
 					} catch(java.io.FileNotFoundException e) {
 						
-						Toast.makeText(getBaseContext(), "Error reading the string", Toast.LENGTH_LONG).show();											
+						Toast.makeText(getBaseContext(), "Invalid file name.", Toast.LENGTH_LONG).show();											
 									
 					}
 					
 					catch (Throwable t) {
 						
 						Toast.makeText(getBaseContext(), "Exception" + t.toString(), Toast.LENGTH_LONG).show();
-						
 						
 					}
 					
@@ -1097,25 +1122,24 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 		    	    String[] objectString = fileContents.split("<name=");
 			
 		    	    for(int i = 1; i<objectString.length; i++) {
-			    	    Toast.makeText(getBaseContext(), "string = " + objectString[i], Toast.LENGTH_LONG).show();		    	    	
+			    	    //Toast.makeText(getBaseContext(), "string = " + objectString[i], Toast.LENGTH_LONG).show();		    	    	
 						
 			    	  
 			    	    objectName = objectString[i].substring(0, objectString[i].indexOf(">"));  	   
 						ObjectAssociation myAssociation = new ObjectAssociation(objectName);			    	    
 			    	    
-			    	    Toast.makeText(getBaseContext(), "object = " + objectName, Toast.LENGTH_LONG).show();				    	   
+			    	    //Toast.makeText(getBaseContext(), "object = " + objectName, Toast.LENGTH_LONG).show();				    	   
 			    	    
 			    	    String[] utterString = objectString[i].split("<utter=");
 			    	    for(int j = 1; j<utterString.length; j++) {				    	    	
 			    	    	utterance = utterString[j].substring(0,utterString[j].indexOf("></utter>"));
 							myAssociation.addUtterance(utterance);			    	    	
 			    	    	
-			    	    	Toast.makeText(getBaseContext(), "utter = " + utterance, Toast.LENGTH_LONG).show();				    	    
+			    	    	//Toast.makeText(getBaseContext(), "utter = " + utterance, Toast.LENGTH_LONG).show();				    	    
 			    	    }
 						associations.add(myAssociation);
 		    	    }
 		    	    		    	    
-		    			    	    
         			templateOpen.dismiss();			
 			
                 }
@@ -1130,7 +1154,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
                 @Override
                 public void onClick(View v) {			
 
-		    	    Toast.makeText(getBaseContext(), "Delete Clicked", Toast.LENGTH_SHORT).show();    	    
+		    	    //Toast.makeText(getBaseContext(), "Delete Clicked", Toast.LENGTH_SHORT).show();    	    
 
 
 		    	    try {
@@ -1166,7 +1190,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 		    adapterImages.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);		    
 	    		    
 		    		            
-    	    Toast.makeText(getBaseContext(), "New Template Clicked", Toast.LENGTH_SHORT).show(); 
+    	    //Toast.makeText(getBaseContext(), "New Template Clicked", Toast.LENGTH_SHORT).show(); 
     	  		    
     	    //  Here we will show all the files in a certain folder			    
 		  
@@ -1262,7 +1286,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
                 @Override
                 public void onClick(View v) {			
 
-		    	    Toast.makeText(getBaseContext(), "Trainer Clicked", Toast.LENGTH_SHORT).show();    	     
+		    	    //Toast.makeText(getBaseContext(), "Trainer Clicked", Toast.LENGTH_SHORT).show();    	     
 		    	    
 		    	    
 		    	    //  Here is where we want to train the voice recognition
@@ -1277,12 +1301,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 				
 					ArrayList<String> info;
 					info = i.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-		    	    
-		    	    //Toast.makeText(getBaseContext(), "What is this variable 'info'" , Toast.LENGTH_SHORT).show(); 		    	    		    	    
-		    	    //Toast.makeText(getBaseContext(), info.get(0), Toast.LENGTH_SHORT).show();
-		    	    // Testing it here
-		    	    //Toast.makeText(getBaseContext(), "Length here is " + info.size(), Toast.LENGTH_SHORT).show();
-		    	    //Toast.makeText(getBaseContext(), "Utterance is " + utterance, Toast.LENGTH_SHORT).show();			    	    
+		    	    		    	    
 		    	    
                 }
             });				    
@@ -1417,7 +1436,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 		                @Override
 		                public void onClick(View v) {			
 
-				    	    Toast.makeText(getBaseContext(), "Cancel Clicked", Toast.LENGTH_SHORT).show();    	    
+				    	    //Toast.makeText(getBaseContext(), "Cancel Clicked", Toast.LENGTH_SHORT).show();    	    
 
 		        			confirmSaveTemplate.dismiss();			
 					
@@ -1436,13 +1455,12 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 				    	    trainingMode = false;
 				    	    
 				    	    //  Here is where we will actually save the template file
-				    	    //  Work on this another day!!!!!!!!!!!!!!!!!!!!!!!!!!!
 				    	    
 				            String filename = textViewFiles.getText().toString();
 				            String outputString="";
 				            
 
-				            //  Here is where we will create the string associations to save to a text file!!!
+				            //  create the string associations to save to a text file
 				    		for(ObjectAssociation association : associations){
 				    			outputString=outputString + "<name="+ association.getName() + ">\n";
 				    			
@@ -1475,7 +1493,9 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 				                fos.flush();
 				                fos.close();
 				    		    Toast.makeText(getBaseContext(), "File created", Toast.LENGTH_SHORT).show();
-				                
+					    	    menuPositionTrackStart.setVisible(true);
+					    	    menuPositionTrackOpen.setVisible(true);
+				    		    
 				            } catch (Exception e) {
 				                e.printStackTrace();
 				                
@@ -1500,14 +1520,14 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 		                @Override
 		                public void onClick(View v) {			
 
-				    	    Toast.makeText(getBaseContext(), "Delete Clicked", Toast.LENGTH_SHORT).show();    	    
+				    	    //Toast.makeText(getBaseContext(), "Delete Clicked", Toast.LENGTH_SHORT).show();    	    
 
 				    	    try {
 				    	        // delete the original file
 				    	        //new File(fileDirectory + "/" + inputFile).delete();  
 
 				    	        new File(fileDirectory + "/" + textViewFiles.getText().toString()).delete(); 				    	        
-					    	    Toast.makeText(getBaseContext(), "Attempting to delete" + fileDirectory + "/" + inputFile, Toast.LENGTH_SHORT).show();
+					    	    //Toast.makeText(getBaseContext(), "Attempting to delete" + fileDirectory + "/" + inputFile, Toast.LENGTH_SHORT).show();
 				    	    } catch (Exception e) {
 				    	        Log.e("tag", e.getMessage());
 				    	    }
@@ -1602,20 +1622,11 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
     	    menuTimeTrackOpen.setVisible(false);    	    
 
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-    	    //final PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-            //this.mWakeLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "My Tag");
-            //this.mWakeLock.acquire();    	    
+  	    
 
-    	   // PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-    	   // PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "My Tag");
-    	   // wl.acquire();
     	    
         	startTime = System.currentTimeMillis();	
     	    
-    
-    	    //TrackingThread t = new TrackingThread(map, this);
-    	    //t.start();
-
 
     	    // Need handler for callbacks to the UI thread
     	    final Handler mHandler = new Handler();
@@ -1983,63 +1994,9 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 			
 		    dialogSave2.show();			
 		    break;
-		    //  These were just for testing...  will delete them when done.
-		    /*
-		case R.id.action_time_track_create:	
-			
-    	    Toast.makeText(getBaseContext(), "Create Clicked", Toast.LENGTH_SHORT).show(); 
-
-    	    databaseConnect = new DatabaseConnector(getBaseContext());
-    	    databaseConnect.open();
-			databaseConnect.createTable("tableToCreate");    	    
-    	    databaseConnect.close();
-			
-    	    
-    	    break;
-		case R.id.action_time_track_drop:
-
-    	    Toast.makeText(getBaseContext(), "Drop Clicked", Toast.LENGTH_SHORT).show(); 
-
-    	    databaseConnect = new DatabaseConnector(getBaseContext());
-    	    databaseConnect.open();
-    
-    	    databaseConnect.dropTable("tableToCreate");
-    	    databaseConnect.close();
-			break;
-			
-
-		case R.id.action_time_track_copy:
-
-    	    databaseConnect = new DatabaseConnector(getBaseContext());
-    	    databaseConnect.open();
-    
-    	    databaseConnect.copyTable();
-    	    databaseConnect.close();
-			break;
-			
-			*/
+		 
 		    
-			/*  Not sure if this does anything
-			File file;
-			
-			
-			
-	    	File myDir = getFilesDir();			
 
-	    	try {			
-	    		File trackFile = new File(myDir + "/track/", "test.trk");
-	    		trackFile.createNewFile();
-
-	    		FileWriter fw = new FileWriter(trackFile);
-	    		fw.write("Test");
-	    		fw.close();
-	    		
-	    		
-	    	} catch(Exception e) {
-	    		
-	    	}
-
-			*/
 		}
 
 		int id = item.getItemId();
@@ -2052,7 +2009,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 	
     private void updateResultsInUi() {
 
-        // Back in the UI thread -- update our UI elements based on the data in mResults
+        // Back in the UI thread -- update our UI e  lements based on the data in mResults
 	    //Toast.makeText(getBaseContext(), "Test!", Toast.LENGTH_SHORT).show();    	    
 
 	    
@@ -2126,22 +2083,25 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 	    			//Toast.makeText(this, "Length = " + thingsYouSaid.size(), Toast.LENGTH_LONG).show();
 	    			Toast.makeText(this, associatedImage + " - " + utterance, Toast.LENGTH_LONG).show();	
 	     
-		    	    // Why am I doing this?????
+		    	    //   Do different things if you are training or tracking
 	    			if(trainingMode) {
 	    				addAssociation(associatedImage, utterance);
+		    			//Toast.makeText(this, "Training mode", Toast.LENGTH_LONG).show();		    		
 	    			} else {
-	    				
+		    			//Toast.makeText(this, "Not training mode", Toast.LENGTH_LONG).show();
 	    				
 	    				
 		    			//  First go through each object association in arraylist
 			    		for(ObjectAssociation association : associations){
 			    			if(association.checkForAssociations(thingsYouSaid.get(0))) {
-				    			Toast.makeText(this, "This is what you meant:" + association.getName(), Toast.LENGTH_LONG).show();	
+				    			Toast.makeText(this, "This is what you meant:" + association.getName(), Toast.LENGTH_LONG).show();
 				    			objectFound = true;
 				    			correctObject = association.getName();
 			    			}			    			
 			    			
 			    		}	    				
+			            locations.add(new LocationItem(pLat, pLong, 0, pAlt, correctObject, ""));        
+
 	    			}
 	    				
 	    
@@ -2165,15 +2125,15 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 	    								//.fromFile(root + "/Pictures/icons/" + correctObject)));	    				
 	    								//.fromResource(R.drawable.grapes)));
 	    								
+	    	            		Toast.makeText(getBaseContext(), "File is : " + root + "/Pictures/icons/" + correctObject, Toast.LENGTH_LONG).show();
+
+	    				
+	    				
 	    			} else {
 		    			Toast.makeText(this, "No object found for this utterance", Toast.LENGTH_LONG).show();	    				
 	    			}
 	    			
-	    			
-	
-
-	    			
-	    			
+	    			    			
 	    			
 	    			if(thingsYouSaid.get(0).equals("done") ) {
 	    				positionTracking = false;
@@ -2217,13 +2177,13 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 			
 			if (association.getName().equals(associatedImage)) {
 				associatedImageFound = true;
-			    Toast.makeText(getBaseContext(), "Image was found", Toast.LENGTH_SHORT).show();	
+			    //Toast.makeText(getBaseContext(), "Image was found", Toast.LENGTH_SHORT).show();	
 				
 				if(association.checkForAssociations(utterance)==true) {
-				    Toast.makeText(getBaseContext(), "Utterance was found", Toast.LENGTH_SHORT).show();	
+				    //Toast.makeText(getBaseContext(), "Utterance was found", Toast.LENGTH_SHORT).show();	
 					utteranceFound = true;
 				} else {
-				    Toast.makeText(getBaseContext(), "Utterance wasn't found for image", Toast.LENGTH_SHORT).show();					
+				    //Toast.makeText(getBaseContext(), "Utterance wasn't found for image", Toast.LENGTH_SHORT).show();					
 					
 				    //  no utterance found.  Add to utterances
 					association.addUtterance(utterance);					
@@ -2253,7 +2213,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 			
 		}
 
-	    Toast.makeText(getBaseContext(), "Size is " + associations.size(), Toast.LENGTH_SHORT).show();		
+	    //Toast.makeText(getBaseContext(), "Size is " + associations.size(), Toast.LENGTH_SHORT).show();		
 	
 	}
 	

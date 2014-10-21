@@ -152,7 +152,7 @@ int bool abc_config_actionMenuItemAllCaps 0x7f0a0005
 int bool abc_config_allowActionMenuItemTextWithIcon 0x7f0a0004
 int bool abc_config_showMenuShortcutsWhenKeyboardPresent 0x7f0a0003
 int bool abc_split_action_bar_is_narrow 0x7f0a0002
-int color abc_search_url_text_holo 0x7f06001a
+int color abc_search_url_text_holo 0x7f06001b
 int color abc_search_url_text_normal 0x7f060017
 int color abc_search_url_text_pressed 0x7f060019
 int color abc_search_url_text_selected 0x7f060018
@@ -166,8 +166,9 @@ int color common_signin_btn_light_text_default 0x7f060004
 int color common_signin_btn_light_text_disabled 0x7f060006
 int color common_signin_btn_light_text_focused 0x7f060007
 int color common_signin_btn_light_text_pressed 0x7f060005
-int color common_signin_btn_text_dark 0x7f06001b
-int color common_signin_btn_text_light 0x7f06001c
+int color common_signin_btn_text_dark 0x7f06001c
+int color common_signin_btn_text_light 0x7f06001d
+int color text_blue 0x7f06001a
 int color wallet_bright_foreground_disabled_holo_light 0x7f06000f
 int color wallet_bright_foreground_holo_dark 0x7f06000a
 int color wallet_bright_foreground_holo_light 0x7f060010
@@ -181,8 +182,8 @@ int color wallet_hint_foreground_holo_dark 0x7f060012
 int color wallet_hint_foreground_holo_light 0x7f060011
 int color wallet_holo_blue_light 0x7f060015
 int color wallet_link_text_light 0x7f060016
-int color wallet_primary_text_holo_light 0x7f06001d
-int color wallet_secondary_text_holo_dark 0x7f06001e
+int color wallet_primary_text_holo_light 0x7f06001e
+int color wallet_secondary_text_holo_dark 0x7f06001f
 int dimen abc_action_bar_default_height 0x7f0b0002
 int dimen abc_action_bar_icon_vertical_padding 0x7f0b0003
 int dimen abc_action_bar_progress_bar_size 0x7f0b000a
@@ -206,6 +207,7 @@ int dimen dialog_fixed_height_major 0x7f0b0013
 int dimen dialog_fixed_height_minor 0x7f0b0014
 int dimen dialog_fixed_width_major 0x7f0b0011
 int dimen dialog_fixed_width_minor 0x7f0b0012
+int dimen text_size 0x7f0b0017
 int drawable abc_ab_bottom_solid_dark_holo 0x7f020000
 int drawable abc_ab_bottom_solid_light_holo 0x7f020001
 int drawable abc_ab_bottom_transparent_dark_holo 0x7f020002

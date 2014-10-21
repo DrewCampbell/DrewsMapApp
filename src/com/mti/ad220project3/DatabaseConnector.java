@@ -43,7 +43,7 @@ public class DatabaseConnector {
 			super(context, DATABASE_NAME, null, DATABASE_VERSION);
 
 			//  Gets here
-			Toast.makeText(ctx, "Helper Constructor", Toast.LENGTH_LONG).show();			
+			//Toast.makeText(ctx, "Helper Constructor", Toast.LENGTH_LONG).show();			
 		}
 
 		// creates table when the database is created
