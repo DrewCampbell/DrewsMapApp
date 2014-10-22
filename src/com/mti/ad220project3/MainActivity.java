@@ -137,6 +137,8 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 	  MenuItem menuMarkLocation;	  
 	  MenuItem menuPositionTrackOpen;
 	  MenuItem menuPositionTrackSave;
+	  MenuItem menuOpenTemplate;
+	  MenuItem menuNewTemplate;
 
 	  MenuItem menuTimeTrackStart;
 	  MenuItem menuTimeTrackStop;	  
@@ -249,7 +251,9 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 		menuMarkLocation = menu.findItem(R.id.action_mark_location); 		
 		menuPositionTrackOpen = menu.findItem(R.id.action_position_track_open); 
 		menuPositionTrackSave = menu.findItem(R.id.action_position_track_save); 		
-
+		menuOpenTemplate = menu.findItem(R.id.action_position_track_open_template);
+		menuNewTemplate = menu.findItem(R.id.action_position_track_new_template);
+		
 		menuTimeTrackStart = menu.findItem(R.id.action_time_track_start); 
 		menuTimeTrackStop = menu.findItem(R.id.action_time_track_stop); 
 		menuTimeTrackOpen = menu.findItem(R.id.action_time_track_open); 
@@ -535,6 +539,8 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
     	    menuMarkLocation.setVisible(true);
     	    menuPositionTrackOpen.setVisible(false);
     	    menuPositionTrackSave.setVisible(false);    	    
+    	    menuOpenTemplate.setVisible(false);
+    	    menuNewTemplate.setVisible(false);
     	    break;
 
     	    
@@ -547,14 +553,14 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
     	    menuMarkLocation.setVisible(false);    	    
     	    menuPositionTrackOpen.setVisible(true);
     	    menuPositionTrackSave.setVisible(true);
+    	    menuOpenTemplate.setVisible(true);
+    	    menuNewTemplate.setVisible(true);
     	    break;
 			
 		//  mark the location
 		case R.id.action_mark_location:
 			
 			positionTracking = true;
-
-
 
 			
 			
@@ -704,12 +710,12 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 		    	        		.snippet("Time=" + cursor.getLong(3) + "Altitude=" + cursor.getDouble(4))
 		    	        		.icon(BitmapDescriptorFactory
 		    	        		//.fromResource(R.drawable.blackberry)
-		    	        		.fromPath(root + "/Pictures/icons/" + fileName + ".png")    	            		
+		    	        		.fromPath(root + "/Pictures/icons/" + fileName)    	            		
 		    	        				));
 			    	            Toast.makeText(getBaseContext(), "File name is : " + root + "/Pictures/icons/" + fileName, Toast.LENGTH_LONG).show();
 
 		    	        	} catch(Exception e) {
-			    	            Toast.makeText(getBaseContext(), "Error in file : " + root + "/Pictures/icons/" + fileName + ".png", Toast.LENGTH_LONG).show();
+			    	            Toast.makeText(getBaseContext(), "Error in file : " + root + "/Pictures/icons/" + fileName, Toast.LENGTH_LONG).show();
 		    	        		
 		    	        	}
 		    	        	
@@ -2125,7 +2131,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 	    								//.fromFile(root + "/Pictures/icons/" + correctObject)));	    				
 	    								//.fromResource(R.drawable.grapes)));
 	    								
-	    	            		Toast.makeText(getBaseContext(), "File is : " + root + "/Pictures/icons/" + correctObject, Toast.LENGTH_LONG).show();
+	    	            		//Toast.makeText(getBaseContext(), "File is : " + root + "/Pictures/icons/" + correctObject, Toast.LENGTH_LONG).show();
 
 	    				
 	    				
