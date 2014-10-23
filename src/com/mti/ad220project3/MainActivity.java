@@ -7,12 +7,9 @@ package com.mti.ad220project3;
 
 
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -22,6 +19,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -41,7 +39,6 @@ import android.preference.PreferenceManager;
 import android.speech.RecognizerIntent;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
-import android.util.Xml;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -147,14 +144,19 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 	  
 	  DatabaseConnector databaseConnect;  //  will be used to connect to our database
 	  Cursor cursor;  //  Cursor to hold returns from database
+
+
 	  
 	  @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);        
 
-        
-  	    associations = new ArrayList<ObjectAssociation>();
+        double thisLatitude;
+        double thisLongitude;
+        LatLng thisLocation = new LatLng(38.661101, -121.341945);
+  	    
+        associations = new ArrayList<ObjectAssociation>();
   	    
         keepTracking = false;
         
@@ -187,23 +189,29 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 		this.zoomLevel = sharedPreferences.getString("ZoomLevel", "15");        
 		this.intZoomLevel = Integer.valueOf(this.zoomLevel);
        	
+		
 
+
+		thisLatitude = Double.longBitsToDouble(sharedPreferences.getLong("latitude", Double.doubleToLongBits(38.661101)));
+		thisLongitude = Double.longBitsToDouble(sharedPreferences.getLong("longitude", Double.doubleToLongBits(-121.341945)));
+		thisLocation = new LatLng(thisLatitude, thisLongitude);
+		
         //Marker sacramento = map.addMarker(new MarkerOptions().position(SACRAMENTO)
         //        .title("Sacramento"));
-        Marker mti = map.addMarker(new MarkerOptions().position(MTI)
-                .title("MTI")    	
-        		.position(MTI)
-        		.title("MTI")
-        		.snippet("This is my school")
-        		.icon(BitmapDescriptorFactory
-        		.fromResource(R.drawable.smiley1)));
+        //Marker mti = map.addMarker(new MarkerOptions().position(MTI)
+        //        .title("MTI")    	
+        //		.position(MTI)
+        //		.title("MTI")
+        //		.snippet("This is my school")
+        //		.icon(BitmapDescriptorFactory
+        //		.fromResource(R.drawable.smiley1)));
         
         
         
 
 
             // Move the camera instantly to MTI with a zoom of 3.
-            map.moveCamera(CameraUpdateFactory.newLatLngZoom(MTI, 3));
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(thisLocation, 3));
 
             // Zoom in, animating the camera.
             map.animateCamera(CameraUpdateFactory.zoomTo(this.intZoomLevel), 2000, null);
@@ -268,17 +276,34 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
 
+		Editor editor = sharedPreferences.edit();
+		
 		switch (item.getItemId()) {
 
 		case R.id.action_settings:
+			
+			editor.putLong("latitude", Double.doubleToRawLongBits(pLat));
+			editor.putLong("longitude", Double.doubleToRawLongBits(pLong)); 
+			editor.commit();
+			
 			Intent settings = new Intent(this, SettingsActivity.class);
 			startActivity(settings);
 			break;
-		case R.id.action_about:
+		case R.id.action_about:	  			
+			
+			editor.putLong("latitude", Double.doubleToRawLongBits(pLat));
+			editor.putLong("longitude", Double.doubleToRawLongBits(pLong)); 
+			editor.commit();
+			
 			Intent about = new Intent(this, AboutActivity.class);
 			startActivity(about);
 			break;	
 		case R.id.action_help:
+			
+			editor.putLong("latitude", Double.doubleToRawLongBits(pLat));
+			editor.putLong("longitude", Double.doubleToRawLongBits(pLong)); 
+			editor.commit();
+			
 			Intent help = new Intent(this, HelpActivity.class);
 			startActivity(help);
 			break;				
@@ -329,7 +354,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
                 public void onClick(View v) {
   
                 	
-                	
+            		Editor editor = sharedPreferences.edit();	                	
                 	
                 	double latitude, longitude;
                 	
@@ -351,8 +376,11 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
         	        		.icon(BitmapDescriptorFactory
         	        		.fromResource(R.drawable.smiley1)));
 					
-					
-					
+    				editor.putLong("latitude", Double.doubleToRawLongBits(latitude));
+    				editor.putLong("longitude", Double.doubleToRawLongBits(longitude));    			
+    				
+    				editor.commit();				
+
 					
 					}
 					catch(Exception e) {
@@ -401,7 +429,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
                 public void onClick(View v) {
   
                 	
-                	
+            		Editor editor = sharedPreferences.edit();	                	
                 	
                 	double latitude, longitude;
                 	
@@ -434,6 +462,12 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 							
 							moveToLatLong(map, lat, lon);	
 		        			dialog2.dismiss();							
+
+						
+		    				editor.putLong("latitude", Double.doubleToRawLongBits(lat));
+		    				editor.putLong("longitude", Double.doubleToRawLongBits(lon));  
+		    				editor.commit();
+		    				
 						} else {
 				    	    Toast.makeText(getBaseContext(), "invalid location: " + fullAddress, Toast.LENGTH_SHORT).show();    	    							
 						}
@@ -516,11 +550,19 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 
 		case R.id.action_thislocation:
 
-            double lat, lng;
+			
+			double lat, lng;
             
             
             if(pLat!=0 && pLong!=0) {
             	moveToLatLong(map, pLat, pLong);			
+
+            
+				editor.putLong("latitude", Double.doubleToRawLongBits(pLat));
+				editor.putLong("longitude", Double.doubleToRawLongBits(pLong));    
+            	
+				editor.commit();
+            
             }
             else {
 	    	    Toast.makeText(getBaseContext(), "Cannot locate GPS", Toast.LENGTH_SHORT).show();            	
@@ -674,7 +716,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 		    	    
 		    	    if (cursor.moveToFirst()) {
 		    	        while ( !cursor.isAfterLast() ) {
-		    	            Toast.makeText(getBaseContext(), "LocID:"+ cursor.getString(0) +"Latitude:"+ cursor.getString(1) + ", Longitude:" + cursor.getString(2) + ", Seconds:" + cursor.getString(3) + "Alititude:" + cursor.getString(4) + "Image:" + cursor.getString(5), Toast.LENGTH_LONG).show();
+		    	            //Toast.makeText(getBaseContext(), "LocID:"+ cursor.getString(0) +"Latitude:"+ cursor.getString(1) + ", Longitude:" + cursor.getString(2) + ", Seconds:" + cursor.getString(3) + "Alititude:" + cursor.getString(4) + "Image:" + cursor.getString(5), Toast.LENGTH_LONG).show();
 
 		    	            //  Let's add icons onto map here
 
@@ -712,7 +754,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 		    	        		//.fromResource(R.drawable.blackberry)
 		    	        		.fromPath(root + "/Pictures/icons/" + fileName)    	            		
 		    	        				));
-			    	            Toast.makeText(getBaseContext(), "File name is : " + root + "/Pictures/icons/" + fileName, Toast.LENGTH_LONG).show();
+			    	            //Toast.makeText(getBaseContext(), "File name is : " + root + "/Pictures/icons/" + fileName, Toast.LENGTH_LONG).show();
 
 		    	        	} catch(Exception e) {
 			    	            Toast.makeText(getBaseContext(), "Error in file : " + root + "/Pictures/icons/" + fileName, Toast.LENGTH_LONG).show();
@@ -725,7 +767,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 		    	        }
 		    	    }
 		    	    
-		    	    Toast.makeText(getBaseContext(), "gets here", Toast.LENGTH_SHORT).show();  			    	    
+		    	    //Toast.makeText(getBaseContext(), "gets here", Toast.LENGTH_SHORT).show();  			    	    
 
 		    	    databaseConnect.close();
 
@@ -799,7 +841,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 
 				    
 					String fileName = listViewFilesSave.getItemAtPosition(position).toString();
-					Toast.makeText(getBaseContext(), fileName, Toast.LENGTH_LONG).show();
+					//Toast.makeText(getBaseContext(), fileName, Toast.LENGTH_LONG).show();
 					
 					txtSaveFileName.setText(fileName);
 					
@@ -829,7 +871,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
                 @Override
                 public void onClick(View v) {
                 	
-		    	    Toast.makeText(getBaseContext(), "Save Clicked", Toast.LENGTH_SHORT).show();                  	
+		    	    //Toast.makeText(getBaseContext(), "Save Clicked", Toast.LENGTH_SHORT).show();                  	
 
 		    	    
 		    	    //  Adding code here!!!!!!!!!!!!!!!!!
@@ -837,7 +879,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 		    	    
 	               	final String databaseName;
                 	
-			    	    Toast.makeText(getBaseContext(), "Save Clicked", Toast.LENGTH_SHORT).show();                  	 	
+			    	    //Toast.makeText(getBaseContext(), "Save Clicked", Toast.LENGTH_SHORT).show();                  	 	
 			    	    //Toast.makeText(getBaseContext(), "Clicked = " + spinnerFilesSave2.getSelectedItem(), Toast.LENGTH_SHORT).show();
 
 			    	    
@@ -863,7 +905,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 			    	    String timeStamp;
 
 			    	    //  size is now 0????  This was working before
-			    	    Toast.makeText(getBaseContext(), "Size is " + locations.size(), Toast.LENGTH_LONG).show();
+			    	    //Toast.makeText(getBaseContext(), "Size is " + locations.size(), Toast.LENGTH_LONG).show();
 			    	    
 			    	    
 			    	    for (LocationItem location : locations) {
@@ -874,7 +916,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 			    	    	image = location.getImage();
 			    	        timeStamp = location.getTimeStamp();
 			    	    	
-		    	            Toast.makeText(getBaseContext(), tableName + " " +latitude + " " +  longitude + " " + seconds + " " + altitude + " " + image + " " + timeStamp, Toast.LENGTH_LONG).show();
+		    	            //Toast.makeText(getBaseContext(), tableName + " " +latitude + " " +  longitude + " " + seconds + " " + altitude + " " + image + " " + timeStamp, Toast.LENGTH_LONG).show();
 			    	        Log.i("Testing", "errored here???" +  tableName + " " +latitude + " " +  longitude + " " + seconds + " " + altitude + " " + image + " " + timeStamp);
 			    	    	databaseConnect.insertData(tableName, latitude, longitude, seconds,altitude, image, timeStamp);
 			    	    }
@@ -885,12 +927,12 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 
 			    	    if (cursor.moveToFirst()) {
 			    	        while ( !cursor.isAfterLast() ) {
-			    	            Toast.makeText(getBaseContext(), "LocID:"+ cursor.getString(0) +"Latitude:"+ cursor.getString(1) + ", Longitude:" + cursor.getString(2) + ", Seconds:" + cursor.getString(3) + "Alititude:" + cursor.getString(4) + "Image:" + cursor.getString(5), Toast.LENGTH_LONG).show();
+			    	            //Toast.makeText(getBaseContext(), "LocID:"+ cursor.getString(0) +"Latitude:"+ cursor.getString(1) + ", Longitude:" + cursor.getString(2) + ", Seconds:" + cursor.getString(3) + "Alititude:" + cursor.getString(4) + "Image:" + cursor.getString(5), Toast.LENGTH_LONG).show();
 			    	            cursor.moveToNext();
 			    	        }
 			    	    }
 			    	    
-			    	    Toast.makeText(getBaseContext(), "gets here", Toast.LENGTH_SHORT).show();  			    	    
+			    	    //Toast.makeText(getBaseContext(), "gets here", Toast.LENGTH_SHORT).show();  			    	    
 
 			    	    databaseConnect.close();		    	    
 			    	    
@@ -954,7 +996,10 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 			
 		case R.id.action_position_track_open_template:
 
-		    final Dialog templateOpen = new Dialog(this);			    
+
+
+			
+			final Dialog templateOpen = new Dialog(this);			    
 		    templateOpen.setContentView(R.layout.open_template);			
 
 		    
@@ -1074,6 +1119,15 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 
 		    	    //Toast.makeText(getBaseContext(), "Open Clicked", Toast.LENGTH_SHORT).show();    	    
 
+                	//  Not sure if I will use these
+                	double northMostLat=-90;
+                	double southMostLat=90;
+                	double eastMostLong=-180;
+                	double westMostLong=180;
+                	double midLat;
+                	double midLong;
+                	
+                	
 		    	    
 		        	File myDir = getFilesDir();
 		        	
@@ -1168,7 +1222,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 		    	        //new File(fileDirectory + "/" + "template20149151851").delete();  
 		    	        new File(fileDirectory + "/" + textViewFile.getText().toString()).delete();  		    	        
 		    	        
-			    	    Toast.makeText(getBaseContext(), "file is " + fileDirectory + "/" + "template20149151851", Toast.LENGTH_SHORT).show(); 
+			    	    //Toast.makeText(getBaseContext(), "file is " + fileDirectory + "/" + "template20149151851", Toast.LENGTH_SHORT).show(); 
 		    	    } catch (Exception e) {
 		    	        Log.e("tag", e.getMessage());
 		    	    }
@@ -1216,7 +1270,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
             if (pictureDirectory.isDirectory())
             {
  
-        	    Toast.makeText(getBaseContext(), "It's a directory", Toast.LENGTH_SHORT).show();             	
+        	    //Toast.makeText(getBaseContext(), "It's a directory", Toast.LENGTH_SHORT).show();             	
 
         	    listFiles = pictureDirectory.listFiles();
 
@@ -1374,7 +1428,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 		            if (fileDirectory.isDirectory())
 		            {
 		            	
-		        	    Toast.makeText(getBaseContext(), "It's a directory", Toast.LENGTH_SHORT).show();             	
+		        	    //Toast.makeText(getBaseContext(), "It's a directory", Toast.LENGTH_SHORT).show();             	
 		        	    
 		        	    listFiles = fileDirectory.listFiles();
 		        	    
@@ -1554,15 +1608,15 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 		    	    //fileDirectory = new File(root + "/Android/data/templates");
 		    	    if (fileDirectory.isDirectory()) {
 		            	
-		        	    Toast.makeText(getBaseContext(), "It's a directory", Toast.LENGTH_SHORT).show();             	
+		        	    //Toast.makeText(getBaseContext(), "It's a directory", Toast.LENGTH_SHORT).show();             	
 
 		           	    File[] listFiles2;
 		        	    listFiles2 = fileDirectory.listFiles();
 		        		            	
 		                for (int picturePointer = 0; picturePointer < listFiles2.length; picturePointer++)
 		                {            	    
-		                	   
-		            	    Toast.makeText(getBaseContext(), listFiles2[picturePointer].toString(), Toast.LENGTH_SHORT).show(); 
+		                	 //This was for testing I guess.  Can probably delete this  
+		            	    //Toast.makeText(getBaseContext(), listFiles2[picturePointer].toString(), Toast.LENGTH_SHORT).show(); 
 		                }  // end for
 		                
 		            }
@@ -1573,11 +1627,11 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 		    	    }
 		    	    
 		    	    
-		    	    Toast.makeText(getBaseContext(), "Number Of Objects " + associations.size() , Toast.LENGTH_SHORT).show();    	
+		    	    //Toast.makeText(getBaseContext(), "Number Of Objects " + associations.size() , Toast.LENGTH_SHORT).show();    	
 		    	    
 		    		for(ObjectAssociation association : associations){
-
-			    	    Toast.makeText(getBaseContext(), association.getName(), Toast.LENGTH_SHORT).show();  
+		    			//  Can probably delete this.  Looks like this was for testing
+			    	    //Toast.makeText(getBaseContext(), association.getName(), Toast.LENGTH_SHORT).show();  
 			    	    
 		    		}
 		    	    
@@ -1718,7 +1772,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 
 					    
 						String fileName = listViewFilesOpen2.getItemAtPosition(position).toString();
-						Toast.makeText(getBaseContext(), fileName, Toast.LENGTH_LONG).show();
+						//Toast.makeText(getBaseContext(), fileName, Toast.LENGTH_LONG).show();
 						
 						txtOpenFileName2.setText(fileName);
 						
@@ -1736,7 +1790,15 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 	                @Override
 	                public void onClick(View v) {
 	                	
-			    	    Toast.makeText(getBaseContext(), "Open Clicked", Toast.LENGTH_SHORT).show();                  	
+	                	double northMostLat=-90;
+	                	double southMostLat=90;
+	                	double eastMostLong=-180;
+	                	double westMostLong=180;
+	                	double midLat;
+	                	double midLong;
+	                	
+	                	
+			    	    //Toast.makeText(getBaseContext(), "Open Clicked", Toast.LENGTH_SHORT).show();                  	
 			    	    String tableName = txtOpenFileName2.getText().toString();
 			    	    
 			    	    
@@ -1753,10 +1815,23 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 
 			    	    if (cursor.moveToFirst()) {
 			    	        while ( !cursor.isAfterLast() ) {
-			    	            Toast.makeText(getBaseContext(), "LocID:"+ cursor.getString(0) +"Latitude:"+ cursor.getString(1) + ", Longitude:" + cursor.getString(2) + ", Seconds:" + cursor.getString(3) + "Alititude:" + cursor.getString(4) + "Image:" + cursor.getString(5), Toast.LENGTH_LONG).show();
+			    	            //Toast.makeText(getBaseContext(), "LocID:"+ cursor.getString(0) +"Latitude:"+ cursor.getString(1) + ", Longitude:" + cursor.getString(2) + ", Seconds:" + cursor.getString(3) + "Alititude:" + cursor.getString(4) + "Image:" + cursor.getString(5), Toast.LENGTH_LONG).show();
 
-			    	            //  Let's add icons onto map here
-
+			    	        	// get east, west, northern and southern.  Used to zoom to correct location
+			    	        	if(cursor.getDouble(1)>northMostLat) {
+			    	        		northMostLat =cursor.getDouble(1); 
+			    	        	}
+			    	        	if(cursor.getDouble(1)<southMostLat) {
+			    	        		southMostLat =cursor.getDouble(1); 
+			    	        	}
+			    	        	if(cursor.getDouble(2)>eastMostLong) {
+			    	        		eastMostLong =cursor.getDouble(2); 
+			    	        	}
+			    	        	if(cursor.getDouble(2)<westMostLong) {
+			    	        		westMostLong =cursor.getDouble(2); 
+			    	        	}			    	        	
+			    	        	
+			    	        	//  Let's add icons onto map here
 			    	        	LatLng newLatLng = new LatLng(cursor.getDouble(1), cursor.getDouble(2));
 			    	        	
 			    	            
@@ -1779,9 +1854,20 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 			    	            
 			    	            cursor.moveToNext();
 			    	        }
+			    	    
+
+			    	       
+			    	    
+		            	//moveToLatLong(map, (eastMostLat+westMostLat)/2, (northMostLong + southMostLong)/2);
+
+			    	    midLat = (northMostLat+southMostLat)/2;
+						midLong = (eastMostLong + westMostLong)/2;
+			    	    moveToLatLong(map, midLat,midLong);			    	    
+			    	    
+		            	//Toast.makeText(getBaseContext(), "long:" + eastMostLong  , Toast.LENGTH_SHORT).show();  		            	
 			    	    }
 			    	    
-			    	    Toast.makeText(getBaseContext(), "gets here", Toast.LENGTH_SHORT).show();  			    	    
+			    	    //Toast.makeText(getBaseContext(), "gets here", Toast.LENGTH_SHORT).show();  			    	    
 
 			    	    databaseConnect.close();
 
@@ -1942,7 +2028,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 		    	        }
 		    	    }
 		    	    
-		    	    Toast.makeText(getBaseContext(), "gets here", Toast.LENGTH_SHORT).show();  			    	    
+		    	    //Toast.makeText(getBaseContext(), "gets here", Toast.LENGTH_SHORT).show();  			    	    
 
 		    	    databaseConnect.close();		    	    
 		    	    

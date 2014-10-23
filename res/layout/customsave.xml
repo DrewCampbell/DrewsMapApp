@@ -16,7 +16,7 @@
      
     <EditText
         android:id="@+id/txtFileName"
-        android:layout_width="180dp"
+        android:layout_width="220dp"
         android:layout_height="match_parent"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/listviewfiles"
@@ -26,7 +26,7 @@
 		android:layout_alignParentBottom="true"
         android:layout_marginTop="4dp"
         android:fontFamily="sans-serif"
-        android:textSize="14sp"
+        android:textSize="@dimen/text_size"
         android:hint="@string/file_name"
         android:inputType="text" />
 
