@@ -204,8 +204,8 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
         //		.title("MTI")
         //		.snippet("This is my school")
         //		.icon(BitmapDescriptorFactory
-        //		.fromResource(R.drawable.smiley1)));
-        
+        //		.fromResource(R.drawable.smiley2)));
+        //    it was smiley1.  Changed to smaller image.
         
         
 
@@ -374,7 +374,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
         	                .title("Current Location")    	
         	        		.snippet("(" + latitude + ",  " + longitude + ")")
         	        		.icon(BitmapDescriptorFactory
-        	        		.fromResource(R.drawable.smiley1)));
+        	        		.fromResource(R.drawable.smiley2)));
 					
     				editor.putLong("latitude", Double.doubleToRawLongBits(latitude));
     				editor.putLong("longitude", Double.doubleToRawLongBits(longitude));    			
@@ -482,7 +482,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
         	                .title("Current Location")    	
         	        		.snippet("(" + lat + ",  " + lon + ")")
         	        		.icon(BitmapDescriptorFactory
-        	        		.fromResource(R.drawable.smiley1)));
+        	        		.fromResource(R.drawable.smiley2)));
 									
 					
 					
@@ -1811,8 +1811,15 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 		    	    
 			    	    map.clear();
 			    	    
+			    	    //  Testing this to fix error when concurrently opening time tracks.
+			    	    //  Was creating a line from the end of the old track to the start of the new track
+			    	    //  This seems to have fixed the error.
+			    	    oldLatLng=null;
+			    	    
+			    	    
+			    	    
 			    	    cursor = databaseConnect.returnData(tableName);
-
+			    	    
 			    	    if (cursor.moveToFirst()) {
 			    	        while ( !cursor.isAfterLast() ) {
 			    	            //Toast.makeText(getBaseContext(), "LocID:"+ cursor.getString(0) +"Latitude:"+ cursor.getString(1) + ", Longitude:" + cursor.getString(2) + ", Seconds:" + cursor.getString(3) + "Alititude:" + cursor.getString(4) + "Image:" + cursor.getString(5), Toast.LENGTH_LONG).show();
@@ -1840,7 +1847,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 			    	            		.position(newLatLng)
 			    	            		.snippet("Time=" + cursor.getLong(3) + "Altitude=" + cursor.getDouble(4))
 			    	            		.icon(BitmapDescriptorFactory
-			    	            		.fromResource(R.drawable.smiley1)
+			    	            		.fromResource(R.drawable.smiley2)
 			    	            		));    
 			    	   
 			    	            if(oldLatLng!=null) {
@@ -1853,7 +1860,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
 			    	            
 			    	            
 			    	            cursor.moveToNext();
-			    	        }
+			    	        }  // end while
 			    	    
 
 			    	       
@@ -2121,11 +2128,11 @@ public class MainActivity extends ActionBarActivity implements LocationListener 
         		.position(newLatLng)
         		.snippet("Time=" + (currentTime-startTime)/1000 + "Altitude=" + pAlt)
         		.icon(BitmapDescriptorFactory
-        		.fromResource(R.drawable.smiley1)
+        		.fromResource(R.drawable.smiley2)
         		));    	
 
         //  Will save location information into a location object
-        locations.add(new LocationItem(pLat, pLong, (currentTime-startTime)/1000, pAlt, "smiley1", timeStamp));        
+        locations.add(new LocationItem(pLat, pLong, (currentTime-startTime)/1000, pAlt, "smiley2", timeStamp));        
         
         		// both of these worked
         		//.fromResource(R.drawable.blackberry)
